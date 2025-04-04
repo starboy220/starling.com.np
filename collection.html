@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Collections - Learn Java</title>
+    <link rel="stylesheet" href="stylesss.css">
+</head>
+<body>
+    <!-- Header and Nav same as index.html -->
+
+    <main class="container">
+        <h2>Collections Framework</h2>
+        
+        <article class="concept-card">
+            <h3>List Interface</h3>
+            <div class="code-example">
+                <pre><code>List&lt;String&gt; fruits = new ArrayList&lt;&gt;();
+fruits.add("Apple");
+fruits.add("Banana");
+fruits.add(0, "Orange"); // Add at index 0
+
+// Iteration
+for (String fruit : fruits) {
+    System.out.println(fruit);
+}</code></pre>
+            </div>
+        </article>
+
+        <article class="concept-card">
+            <h3>Map Interface</h3>
+            <div class="code-example">
+                <pre><code>Map&lt;String, Integer&gt; ageMap = new HashMap&lt;&gt;();
+ageMap.put("Alice", 25);
+ageMap.put("Bob", 30);
+
+// Get value
+int aliceAge = ageMap.get("Alice");
+
+// Iteration
+for (Map.Entry&lt;String, Integer&gt; entry : ageMap.entrySet()) {
+    System.out.println(entry.getKey() + ": " + entry.getValue());
+}</code></pre>
+            </div>
+        </article>
+
+        <div class="navigation-buttons">
+            <a href="advanced.html" class="btn">Previous: Advanced</a>
+            <a href="exceptions.html" class="btn">Next: Exceptions</a>
+        </div>
+    </main>
+
+    <!-- Footer same as index.html -->
+</body>
+</html>
