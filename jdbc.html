@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JDBC - Learn Java</title>
+    <link rel="stylesheet" href="stylesss.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><i class="fab fa-java"></i> JDBC (Java Database Connectivity)</h1>
+            <p class="subtitle">by Starling Thapa</p>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="basics.html">Basics</a></li>
+                <li><a href="oop.html">OOP</a></li>
+                <li><a href="exceptions.html">Exceptions</a></li>
+                <li><a href="multithreading.html">Multithreading</a></li>
+                <li><a href="jdbc.html" class="active">JDBC</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <h2>Java Database Connectivity</h2>
+        
+        <article class="concept-card">
+            <h3>Basic JDBC Operations</h3>
+            <div class="code-example">
+                <pre><code>import java.sql.*;
+
+public class JdbcExample {
+    public static void main(String[] args) {
+        String url = "jdbc:mysql://localhost:3306/mydatabase";
+        String username = "root";
+        String password = "password";
+        
+        try (Connection connection = DriverManager.getConnection(url, username, password);
+             Statement statement = connection.createStatement()) {
+            
+            // Create table
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS users (" +
+                                  "id INT PRIMARY KEY AUTO_INCREMENT, " +
+                                  "name VARCHAR(50), " +
+                                  "email VARCHAR(50))");
+            
+            // Insert data
+            statement.executeUpdate("INSERT INTO users (name, email) " +
+                                  "VALUES ('John Doe', 'john@example.com')");
+            
+            // Query data
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM users");
+            while (resultSet.next()) {
+                System.out.println(resultSet.getInt("id") + " " +
+                                  resultSet.getString("name") + " " +
+                                  resultSet.getString("email"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+            </div>
+            <p>JDBC provides a standard API for connecting to relational databases.</p>
+        </article>
+
+        <article class="concept-card">
+            <h3>PreparedStatement</h3>
+            <div class="code-example">
+                <pre><code>// Using PreparedStatement to prevent SQL injection
+String sql = "INSERT INTO users (name, email) VALUES (?, ?)";
+
+try (Connection connection = DriverManager.getConnection(url, username, password);
+     PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+    
+    preparedStatement.setString(1, "Alice");
+    preparedStatement.setString(2, "alice@example.com");
+    preparedStatement.executeUpdate();
+    
+    preparedStatement.setString(1, "Bob");
+    preparedStatement.setString(2, "bob@example.com");
+    preparedStatement.executeUpdate();
+    
+} catch (SQLException e) {
+    e.printStackTrace();
+}</code></pre>
+            </div>
+            <p>PreparedStatement is more efficient and secure than regular Statement.</p>
+        </article>
+
+        <div class="navigation-buttons">
+            <a href="multithreading.html" class="btn">Previous: Multithreading</a>
+            <a href="index.html" class="btn">Back to Home</a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Learn Java by Starling Thapa</p>
+        </div>
+    </footer>
+</body>
+</html>
