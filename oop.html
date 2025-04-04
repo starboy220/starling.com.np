@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python OOP - Learn Python</title>
+    <link rel="stylesheet" href="styless.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <i class="fab fa-python"></i>
+                <h1>Learn Python</h1>
+            </div>
+            <nav>
+                <!-- Updated navigation as shown above -->
+            </nav>
+        </div>
+    </header>
+
+    <section class="topic-header">
+        <div class="container">
+            <h2>Object-Oriented Programming in Python</h2>
+            <p>Learn how to structure your programs using classes and objects.</p>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container">
+            <article>
+                <h3>Classes and Objects</h3>
+                <p>The fundamental building blocks of OOP in Python.</p>
+                <pre><code># Defining a class
+class Dog:
+    # Class attribute
+    species = "Canis familiaris"
+
+    # Initializer / Instance attributes
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    # Instance method
+    def description(self):
+        return f"{self.name} is {self.age} years old"
+
+# Creating objects
+my_dog = Dog("Rex", 5)
+print(my_dog.description())</code></pre>
+            </article>
+
+            <article>
+                <h3>Inheritance</h3>
+                <p>Creating new classes based on existing ones.</p>
+                <pre><code># Parent class
+class Animal:
+    def __init__(self, name):
+        self.name = name
+
+    def speak(self):
+        raise NotImplementedError("Subclass must implement this method")
+
+# Child class
+class Cat(Animal):
+    def speak(self):
+        return f"{self.name} says Meow!"
+
+my_cat = Cat("Whiskers")
+print(my_cat.speak())</code></pre>
+            </article>
+
+            <article>
+                <h3>Encapsulation</h3>
+                <p>Controlling access to an object's components.</p>
+                <pre><code>class BankAccount:
+    def __init__(self, account_holder, initial_balance=0):
+        self._account_holder = account_holder  # Protected
+        self.__balance = initial_balance      # Private
+
+    def deposit(self, amount):
+        self.__balance += amount
+
+    def get_balance(self):
+        return self.__balance
+
+account = BankAccount("Alice", 100)
+account.deposit(50)
+print(account.get_balance())  # 150
+# print(account.__balance)    # Error - private member</code></pre>
+            </article>
+
+            <article>
+                <h3>Polymorphism</h3>
+                <p>Using a unified interface for different data types.</p>
+                <pre><code>class Rectangle:
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+
+    def area(self):
+        return self.width * self.height
+
+class Circle:
+    def __init__(self, radius):
+        self.radius = radius
+
+    def area(self):
+        return 3.14 * self.radius ** 2
+
+# Polymorphic function
+def print_area(shape):
+    print(f"Area: {shape.area()}")
+
+rect = Rectangle(4, 5)
+circ = Circle(3)
+print_area(rect)  # Area: 20
+print_area(circ)  # Area: 28.26</code></pre>
+            </article>
+
+            <div class="navigation">
+                <a href="data-structures.html" class="btn btn-secondary">← Back: Data Structures</a>
+                <a href="file-handling.html" class="btn">Next: File Handling →</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <!-- Same footer as other pages -->
+    </footer>
+</body>
+</html>
