@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Modules & Packages - Learn Python</title>
+    <link rel="stylesheet" href="styless.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <!-- Same header as other pages -->
+    </header>
+
+    <section class="topic-header">
+        <div class="container">
+            <h2>Python Modules & Packages</h2>
+            <p>Learn how to organize and reuse your code with modules and packages.</p>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container">
+            <article>
+                <h3>Creating and Using Modules</h3>
+                <p>Modules are Python files containing reusable code.</p>
+                <pre><code># File: calculator.py
+def add(a, b):
+    return a + b
+
+def multiply(a, b):
+    return a * b
+
+# In another file:
+import calculator
+
+result = calculator.add(5, 3)
+print(result)  # 8
+
+# Alternative imports
+from calculator import multiply
+print(multiply(4, 6))  # 24</code></pre>
+            </article>
+
+            <article>
+                <h3>Standard Library Modules</h3>
+                <p>Python comes with many useful built-in modules.</p>
+                <pre><code>import math
+print(math.sqrt(16))  # 4.0
+
+import random
+print(random.randint(1, 10))  # Random number between 1-10
+
+from datetime import datetime
+print(datetime.now())  # Current date and time</code></pre>
+            </article>
+
+            <article>
+                <h3>Creating Packages</h3>
+                <p>Packages are collections of modules in directories.</p>
+                <pre><code># Directory structure:
+# mypackage/
+# ├── __init__.py
+# ├── module1.py
+# └── module2.py
+
+# Using the package:
+from mypackage import module1
+from mypackage.module2 import some_function</code></pre>
+            </article>
+
+            <article>
+                <h3>Installing Third-Party Packages</h3>
+                <p>Using pip to install packages from PyPI.</p>
+                <pre><code># In your terminal/command prompt:
+# pip install package-name
+
+# Common pip commands:
+# pip install requests     # Install a package
+# pip list                # List installed packages
+# pip freeze > requirements.txt  # Save dependencies
+# pip install -r requirements.txt # Install from file</code></pre>
+            </article>
+
+            <article>
+                <h3>Virtual Environments</h3>
+                <p>Isolating project dependencies.</p>
+                <pre><code># Creating a virtual environment
+# python -m venv myenv
+
+# Activating it (Windows):
+# myenv\Scripts\activate
+
+# Activating it (macOS/Linux):
+# source myenv/bin/activate
+
+# Deactivating:
+# deactivate</code></pre>
+            </article>
+
+            <div class="navigation">
+                <a href="error-handling.html" class="btn btn-secondary">← Back: Error Handling</a>
+                <a href="popular-libraries.html" class="btn">Next: Popular Libraries →</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <!-- Same footer as other pages -->
+    </footer>
+</body>
+</html>
