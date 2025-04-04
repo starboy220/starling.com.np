@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exception Handling - Learn Java</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><i class="fab fa-java"></i> Exception Handling</h1>
+            <p class="subtitle">by Starling Thapa</p>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="basics.html">Basics</a></li>
+                <li><a href="oop.html">OOP</a></li>
+                <li><a href="exceptions.html" class="active">Exceptions</a></li>
+                <li><a href="multithreading.html">Multithreading</a></li>
+                <li><a href="jdbc.html">JDBC</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <h2>Java Exception Handling</h2>
+        
+        <article class="concept-card">
+            <h3>Try-Catch Block</h3>
+            <div class="code-example">
+                <pre><code>try {
+    int result = 10 / 0; // This will throw ArithmeticException
+} catch (ArithmeticException e) {
+    System.out.println("Cannot divide by zero!");
+    System.out.println(e.getMessage());
+} finally {
+    System.out.println("This block always executes");
+}</code></pre>
+            </div>
+            <p>The try block contains code that might throw exceptions. The catch block handles specific exceptions.</p>
+        </article>
+
+        <article class="concept-card">
+            <h3>Custom Exceptions</h3>
+            <div class="code-example">
+                <pre><code>class InvalidAgeException extends Exception {
+    public InvalidAgeException(String message) {
+        super(message);
+    }
+}
+
+public class Main {
+    static void validateAge(int age) throws InvalidAgeException {
+        if (age < 18) {
+            throw new InvalidAgeException("Age must be 18 or older");
+        }
+    }
+    
+    public static void main(String[] args) {
+        try {
+            validateAge(15);
+        } catch (InvalidAgeException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+}</code></pre>
+            </div>
+            <p>You can create custom exception classes by extending the Exception class.</p>
+        </article>
+
+        <div class="navigation-buttons">
+            <a href="collections.html" class="btn">Previous: Collections</a>
+            <a href="multithreading.html" class="btn">Next: Multithreading</a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Learn Java by Starling Thapa</p>
+        </div>
+    </footer>
+</body>
+</html>
