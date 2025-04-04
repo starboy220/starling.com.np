@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Multithreading - Learn Java</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><i class="fab fa-java"></i> Multithreading</h1>
+            <p class="subtitle">by Starling Thapa</p>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="basics.html">Basics</a></li>
+                <li><a href="oop.html">OOP</a></li>
+                <li><a href="exceptions.html">Exceptions</a></li>
+                <li><a href="multithreading.html" class="active">Multithreading</a></li>
+                <li><a href="jdbc.html">JDBC</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <h2>Java Multithreading</h2>
+        
+        <article class="concept-card">
+            <h3>Creating Threads</h3>
+            <div class="code-example">
+                <pre><code>// Extending Thread class
+class MyThread extends Thread {
+    public void run() {
+        System.out.println("Thread is running");
+    }
+}
+
+// Implementing Runnable interface
+class MyRunnable implements Runnable {
+    public void run() {
+        System.out.println("Runnable is running");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        MyThread thread1 = new MyThread();
+        thread1.start();
+        
+        Thread thread2 = new Thread(new MyRunnable());
+        thread2.start();
+    }
+}</code></pre>
+            </div>
+            <p>Threads can be created by extending Thread class or implementing Runnable interface.</p>
+        </article>
+
+        <article class="concept-card">
+            <h3>Synchronization</h3>
+            <div class="code-example">
+                <pre><code>class Counter {
+    private int count = 0;
+    
+    // Synchronized method
+    public synchronized void increment() {
+        count++;
+    }
+    
+    public int getCount() {
+        return count;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) throws InterruptedException {
+        Counter counter = new Counter();
+        
+        Thread t1 = new Thread(() -> {
+            for (int i = 0; i < 1000; i++) {
+                counter.increment();
+            }
+        });
+        
+        Thread t2 = new Thread(() -> {
+            for (int i = 0; i < 1000; i++) {
+                counter.increment();
+            }
+        });
+        
+        t1.start();
+        t2.start();
+        t1.join();
+        t2.join();
+        
+        System.out.println("Final count: " + counter.getCount());
+    }
+}</code></pre>
+            </div>
+            <p>Synchronization prevents thread interference when multiple threads access shared resources.</p>
+        </article>
+
+        <div class="navigation-buttons">
+            <a href="exceptions.html" class="btn">Previous: Exceptions</a>
+            <a href="jdbc.html" class="btn">Next: JDBC</a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Learn Java by Starling Thapa</p>
+        </div>
+    </footer>
+</body>
+</html>
