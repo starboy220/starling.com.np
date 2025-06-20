@@ -42,9 +42,9 @@ const Hero: React.FC = () => {
                     <div className="text-sm font-mono text-gray-400">PROFILE_IMAGE.JPG</div>
                   </div>
                 </div>
-                {/* Replace the div above with this when you have an image:
+                {
                 <img 
-                  src="/path/to/your/profile-image.jpg" 
+                  src="star.jpg" 
                   alt="Starling Thapa" 
                   className="w-full h-full object-cover"
                 />
