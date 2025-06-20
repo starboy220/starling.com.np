@@ -774,6 +774,20 @@
     </style>
 </head>
 <body>
+    <div id="loading-screen">
+        <div class="loading-text">INITIALIZING SECURE SYSTEM...</div>
+        <div class="loading-bar-container">
+            <div class="loading-bar" id="loading-bar"></div>
+        </div>
+        <div class="terminal" id="terminal">
+            <div class="terminal-line">Starting secure boot sequence...</div>
+            <div class="terminal-line code">[✓] Loading kernel modules</div>
+            <div class="terminal-line code">[✓] Initializing encryption protocols</div>
+            <div class="terminal-line warning">[!] Scanning for intrusion attempts</div>
+            <div class="terminal-line code">[✓] Firewall activated</div>
+            <div class="terminal-line success">System secure. Welcome, authorized user.</div>
+        </div>
+    </div>
     <nav id="navbar">
         <div class="container">
             <div class="nav-content">
@@ -997,6 +1011,64 @@
     </footer>
 
     <script>
+         document.addEventListener('DOMContentLoaded', function() {
+            const loadingBar = document.getElementById('loading-bar');
+            const terminal = document.getElementById('terminal');
+            const loadingScreen = document.getElementById('loading-screen');
+            const mainContent = document.getElementById('main-content');
+            
+            // Add more terminal lines dynamically
+            const terminalLines = [
+                {text: "Initializing secure connection...", class: "code", delay: 300},
+                {text: "Verifying identity credentials...", class: "code", delay: 600},
+                {text: "[!] Scanning for network vulnerabilities", class: "warning", delay: 900},
+                {text: "[✓] No critical threats detected", class: "success", delay: 1200},
+                {text: "Loading encryption modules...", class: "code", delay: 1500},
+                {text: "Establishing secure tunnel...", class: "code", delay: 1800},
+                {text: "[!] Monitoring for intrusion attempts", class: "warning", delay: 2100},
+                {text: "[✓] All systems secure", class: "success", delay: 2400},
+                {text: "Finalizing security protocols...", class: "code", delay: 2700},
+                {text: "Access granted. Welcome back, operator.", class: "success", delay: 3000}
+            ];
+            
+            let progress = 0;
+            let currentLine = 0;
+            
+            // Simulate progress with random increments
+            const interval = setInterval(function() {
+                // Progress bar
+                progress += Math.random() * 8;
+                if (progress > 100) progress = 100;
+                loadingBar.style.width = progress + '%';
+                
+                // Terminal lines
+                if (currentLine < terminalLines.length && progress >= (currentLine + 1) * (100 / terminalLines.length)) {
+                    const line = terminalLines[currentLine];
+                    setTimeout(function() {
+                        const lineElement = document.createElement('div');
+                        lineElement.className = `terminal-line ${line.class}`;
+                        lineElement.textContent = line.text;
+                        terminal.appendChild(lineElement);
+                        terminal.scrollTop = terminal.scrollHeight;
+                    }, line.delay);
+                    currentLine++;
+                }
+                
+                // Complete loading
+                if (progress === 100 && currentLine >= terminalLines.length) {
+                    clearInterval(interval);
+                    setTimeout(function() {
+                        loadingScreen.style.opacity = '0';
+                        setTimeout(function() {
+                            loadingScreen.style.display = 'none';
+                            mainContent.style.display = 'block';
+                            initMatrix();
+                            initScrollAnimations();
+                        }, 500);
+                    }, 1000);
+                }
+            }, 150);
+        });
         // Theme Toggle
         const themeToggle = document.getElementById('theme-toggle');
         const toggleBtn = themeToggle.querySelector('.toggle-btn');
