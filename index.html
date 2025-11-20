@@ -263,10 +263,11 @@
         }
 
         .hero-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
+            display: flex;
+            flex-direction: column;
             align-items: center;
+            gap: 3rem;
+            width: 100%;
         }
 
         .terminal-window {
@@ -274,6 +275,8 @@
             overflow: hidden;
             background-color: hsl(var(--card) / 0.95);
             backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 800px;
         }
 
         .terminal-header {
@@ -317,63 +320,64 @@
             color: hsl(var(--foreground));
             margin: 1rem 0;
         }
-/* Circular Scanning Image */
-.scan-wrapper {
-    padding: 1rem;
-}
 
-.scan-container {
-    position: relative;
-    width: 280px;
-    height: 280px;
-    margin: auto;
-    border-radius: 50%;
-    overflow: hidden;
-    border: 3px solid hsl(var(--primary));
-    box-shadow: 0 0 30px hsl(var(--primary) / 0.4);
-}
+        /* Circular Scanning Image */
+        .scan-wrapper {
+            padding: 1rem;
+        }
 
-.profile-img {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    object-fit: cover;
-}
+        .scan-container {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            margin: auto;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid hsl(var(--primary));
+            box-shadow: 0 0 30px hsl(var(--primary) / 0.4);
+        }
 
-/* Scanning Line */
-.scan-line {
-    position: absolute;
-    top: -100%;
-    width: 100%;
-    height: 4px;
-    background: hsl(142, 76%, 50%);
-    box-shadow: 0 0 15px hsl(142, 76%, 70%);
-    animation: scan-move 3s linear infinite;
-}
+        .profile-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
 
-@keyframes scan-move {
-    0% { top: -20%; }
-    100% { top: 120%; }
-}
+        /* Scanning Line */
+        .scan-line {
+            position: absolute;
+            top: -100%;
+            width: 100%;
+            height: 4px;
+            background: hsl(142, 76%, 50%);
+            box-shadow: 0 0 15px hsl(142, 76%, 70%);
+            animation: scan-move 3s linear infinite;
+        }
 
-/* Glow overlay */
-.scan-glow {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-        to bottom,
-        transparent,
-        hsla(142, 76%, 50%, 0.15),
-        transparent
-    );
-    pointer-events: none;
-    animation: scan-glow-fade 3s linear infinite;
-}
+        @keyframes scan-move {
+            0% { top: -20%; }
+            100% { top: 120%; }
+        }
 
-@keyframes scan-glow-fade {
-    0%, 100% { opacity: 0.1; }
-    50% { opacity: 0.25; }
-}
+        /* Glow overlay */
+        .scan-glow {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to bottom,
+                transparent,
+                hsla(142, 76%, 50%, 0.15),
+                transparent
+            );
+            pointer-events: none;
+            animation: scan-glow-fade 3s linear infinite;
+        }
+
+        @keyframes scan-glow-fade {
+            0%, 100% { opacity: 0.1; }
+            50% { opacity: 0.25; }
+        }
 
         .hero-roles {
             font-size: 1.5rem;
@@ -395,6 +399,7 @@
             gap: 1rem;
             margin-top: 2rem;
             flex-wrap: wrap;
+            justify-content: center;
         }
 
         .btn {
@@ -438,7 +443,7 @@
 
         .hero-image-inner {
             border: 3px solid hsl(var(--primary));
-            border-radius: 0.5rem;
+            border-radius:25%;
             overflow: hidden;
             position: relative;
         }
@@ -1057,7 +1062,6 @@
                 display: block;
             }
 
-            .hero-grid,
             .contact-grid {
                 grid-template-columns: 1fr;
             }
@@ -1152,6 +1156,22 @@
         <section id="home">
             <div class="container">
                 <div class="hero-grid">
+                    <!-- Profile Image at the Top -->
+                    <div class="animate-slide-up" style="animation-delay: 0.1s">
+                        <div class="hero-image">
+                            <div class="hero-image-inner terminal-border glow-effect animate-float scan-wrapper">
+                                <div class="scan-container">
+                                    <img src="download.png" class="profile-img" alt="Profile">
+                                    <!-- Scanning Line -->
+                                    <div class="scan-line"></div>
+                                    <!-- Glow Overlay -->
+                                    <div class="scan-glow"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Terminal Content Below -->
                     <div class="animate-slide-up">
                         <div class="terminal-window terminal-border">
                             <div class="terminal-header">
@@ -1186,26 +1206,6 @@
                                     <a href="#contact" class="btn btn-primary glow-effect">Get In Touch</a>
                                     <a href="#about" class="btn btn-outline">Learn More</a>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="animate-slide-up" style="animation-delay: 0.2s">
-                        <div class="hero-image">
-    <div class="hero-image-inner terminal-border glow-effect animate-float scan-wrapper">
-
-        <div class="scan-container">
-            <img src="sss.jpg" class="profile-img" alt="Profile">
-
-            <!-- Scanning Line -->
-            <div class="scan-line"></div>
-
-            <!-- Glow Overlay -->
-            <div class="scan-glow"></div>
-        </div>
-
-    </div>
-</div>
-
                             </div>
                         </div>
                     </div>
