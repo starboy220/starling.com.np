@@ -326,38 +326,71 @@
             padding: 1rem;
         }
 
-        .scan-container {
+                /* Octagon shape + new container */
+                /* ←←← REPLACE your current .scan-container →→→ */
+                        .scan-container {
             position: relative;
             width: 280px;
             height: 280px;
             margin: auto;
-            border-radius: 50%;
-            overflow: hidden;
             border: 3px solid hsl(var(--primary));
             box-shadow: 0 0 30px hsl(var(--primary) / 0.4);
+            overflow: hidden;
+
+            /* Perfect sharp octagon – works 100% everywhere in 2025 */
+            clip-path: polygon(
+                30% 0%, 70% 0%,
+                100% 30%, 100% 70%,
+                70% 100%, 30% 100%,
+                0% 70%, 0% 30%
+            );
+            -webkit-clip-path: polygon(
+                30% 0%, 70% 0%,
+                100% 30%, 100% 70%,
+                70% 100%, 30% 100%,
+                0% 70%, 0% 30%
+            );
         }
 
-        .profile-img {
+                .profile-img {
             width: 100%;
             height: 100%;
-            border-radius: 50%;
             object-fit: cover;
+            border-radius: 0 !important;   /* ← force no rounding */
+            display: block;
         }
 
         /* Scanning Line */
+                /* Bidirectional + faster scanning line */
         .scan-line {
             position: absolute;
-            top: -100%;
+            left: 0;
             width: 100%;
-            height: 4px;
+            height: 6px;
             background: hsl(142, 76%, 50%);
-            box-shadow: 0 0 15px hsl(142, 76%, 70%);
-            animation: scan-move 3s linear infinite;
+            box-shadow: 0 0 20px hsl(142, 76%, 80%);
+            animation: scan-bidirectional 1.8s linear infinite;
         }
 
-        @keyframes scan-move {
-            0% { top: -20%; }
-            100% { top: 120%; }
+        @keyframes scan-bidirectional {
+            0%   { top: -10%; }
+            45%  { top: 110%; }
+            55%  { top: 110%; }
+            100% { top: -10%; }
+        }
+
+        /* Optional: make glow follow the faster line */
+        .scan-glow {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to bottom,
+                transparent 0%,
+                hsla(142, 76%, 50%, 0.25) 50%,
+                transparent 100%
+            );
+            pointer-events: none;
+            animation: scan-glow-fade 1.8s linear infinite;
         }
 
         /* Glow overlay */
@@ -434,18 +467,20 @@
             color: hsl(var(--primary-foreground));
         }
 
-        .hero-image {
-            width: 100%;
-            max-width: 400px;
-            margin: 0 auto;
-            position: relative;
-        }
+        /* ←←← Also update .hero-image-inner to not interfere →→→ */
+.hero-image-inner {
+    border: 3px solid hsl(var(--primary));
+    overflow: visible;     /* crucial */
+    position: relative;
+    border-radius: 0;
+}
 
-        .hero-image-inner {
+               .hero-image-inner {
+            /* Remove border-radius completely and don't hide overflow here */
             border: 3px solid hsl(var(--primary));
-            border-radius:25%;
-            overflow: hidden;
+            overflow: visible;           /* ← VERY IMPORTANT */
             position: relative;
+            border-radius: 0;            /* ← force no rounding */
         }
 
         .hero-image img {
@@ -935,76 +970,122 @@
         }
 
         /* Loading Screen */
-        #loading-screen {
-            position: fixed;
-            inset: 0;
-            z-index: 9999;
-            background-color: hsl(var(--background));
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 0.5s;
-        }
+        /* ———————————————————————— */
+/* SHRIJESH.COM.NP STYLE LOADING SCREEN – PURE CSS ONLY */
+/* ———————————————————————— */
 
-        #loading-screen.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
+#loading-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background-color: hsl(var(--background));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Courier New', monospace;
+    color: hsl(var(--primary));
+    animation: fadeOut 0.8s ease-out 3.5s forwards; /* auto hide after ~3.5s */
+    pointer-events: none;
+}
 
-        .loading-content {
-            width: 100%;
-            max-width: 700px;
-            padding: 0 1rem;
-        }
+.loading-content {
+    width: 100%;
+    max-width: 680px;
+    padding: 0 1rem;
+}
 
-        .loading-title {
-            font-size: 2rem;
-            font-weight: bold;
-            text-align: center;
-            margin-bottom: 2rem;
-        }
+.loading-title {
+    font-size: 1.6rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 2rem;
+    letter-spacing: 2px;
+}
 
-        .loading-terminal {
-            border: 1px solid hsl(var(--primary));
-            border-radius: 0.5rem;
-            background-color: hsl(var(--card));
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
+/* Terminal box */
+.loading-terminal {
+    background: hsl(var(--card));
+    border: 2px solid hsl(var(--primary));
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    overflow: hidden;
+}
 
-        .loading-line {
-            font-size: 0.875rem;
-            margin-bottom: 0.5rem;
-        }
+/* Each line with typing animation */
+.loading-line {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: 2px solid hsl(var(--primary));
+}
 
-        .loading-line.success {
-            color: hsl(var(--primary));
-        }
+/* Individual delays + typing duration */
+.loading-line:nth-child(1) { animation: typing 1s steps(30) 0.2s forwards, blink 0.8s step-end infinite; }
+.loading-line:nth-child(2) { animation: typing 1.2s steps(40) 0.8s forwards, blink 0.8s step-end infinite; }
+.loading-line:nth-child(3) { animation: typing 1.5s steps(45) 1.7s forwards, blink 0.8s step-end infinite; }
+.loading-line:nth-child(4) { animation: typing 1.3s steps(38) 2.8s forwards, blink 0.8s step-end infinite; }
+.loading-line:nth-child(5) { animation: typing 1.1s steps(28) 3.6s forwards, blink 0.8s step-end infinite; }
+.loading-line:nth-child(6) { animation: typing 1.4s steps(42) 4.4s forwards, blink 0.8s step-end infinite; }
+.loading-line:nth-child(7) { animation: typing 1.2s steps(35) 5.4s forwards, blink 0.8s step-end infinite; }
 
-        .loading-line.warning {
-            color: hsl(var(--accent));
-        }
+/* Typing animation */
+@keyframes typing {
+    from { width: 0; }
+    to   { width: 100%; }
+}
 
-        .loading-cursor {
-            animation: pulse 1s infinite;
-        }
+@keyframes blink {
+    50% { border-color: transparent; }
+}
 
-        .progress-bar {
-            position: relative;
-            height: 8px;
-            overflow: hidden;
-            border-radius: 9999px;
-            background-color: hsl(var(--muted));
-        }
+/* Progress bar – pure CSS filling with = */
+.progress-bar {
+    margin-top: 2rem;
+    height: 24px;
+    background: #000;
+    border: 2px solid hsl(var(--primary));
+    overflow: hidden;
+    position: relative;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
 
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(to right, hsl(var(--primary)), hsl(var(--accent)));
-            transition: width 0.3s ease-out;
-            box-shadow: 0 0 10px hsl(var(--primary) / 0.5);
-        }
+.progress-fill {
+    height: 100%;
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    width: 0%;
+    animation: fillBar 3.5s linear forwards;
+}
+
+.progress-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: hsl(var(--primary));
+    z-index: 2;
+}
+
+/* Fill animation + text content */
+@keyframes fillBar {
+    0%   { width: 0%;    content: "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0%"; }
+    25%  { width: 25%;   content: "════════════━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 25%"; }
+    50%  { width: 50%;   content: "════════════════════════════━━━━━━━━━━━━ 50%"; }
+    75%  { width: 75%;   content: "══════════════════════════════════════════ 75%"; }
+    100% { width: 100%;  content: "══════════════════════════════════════════════════ 100%"; }
+}
+
+/* Fade out entire screen */
+@keyframes fadeOut {
+    to { opacity: 0; visibility: hidden; }
+}
 
         /* Canvas Backgrounds */
         #matrix-canvas,
@@ -1111,17 +1192,21 @@
 <body>
     <!-- Loading Screen -->
     <div id="loading-screen">
-        <div class="loading-content">
-            <h1 class="loading-title terminal-text glow-effect">INITIALIZING SECURE SYSTEM...</h1>
-            <div class="loading-terminal terminal-border">
-                <div id="terminal-output"></div>
-                <div class="loading-line terminal-text loading-cursor">_</div>
-            </div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progress-fill"></div>
-            </div>
+    <div class="loading-content">
+        <h1 class="loading-title">INITIALIZING SECURE SYSTEM...</h1>
+        <div class="loading-terminal">
+            <div class="loading-line">user@starling:~$</div>
+            <div class="loading-line">Initializing secure connection...</div>
+            <div class="loading-line">0% Loading security protocols...</div>
+            <div class="loading-line">[!] Scanning for vulnerabilities</div>
+            
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+            <div class="progress-text">0%</div>
         </div>
     </div>
+</div>
 
     <!-- Matrix Rain Canvas -->
     <canvas id="matrix-canvas"></canvas>
@@ -1538,57 +1623,10 @@
     </footer>
 
     <script>
-        // Loading Screen
-        const terminalLines = [
-            { text: 'Initializing secure connection...', delay: 300, class: '' },
-            { text: 'Verifying identity credentials...', delay: 600, class: '' },
-            { text: '[!] Scanning for network vulnerabilities', delay: 900, class: 'warning' },
-            { text: '[✓] No critical threats detected', delay: 1200, class: 'success' },
-            { text: 'Loading encryption modules...', delay: 1500, class: '' },
-            { text: 'Establishing secure tunnel...', delay: 1800, class: '' },
-            { text: '[✓] All systems secure', delay: 2100, class: 'success' },
-            { text: 'Access granted. Welcome back, operator.', delay: 2400, class: '' },
-        ];
+        
+        
 
-        let currentLine = 0;
-        let progress = 0;
-
-        function updateProgress() {
-            progress += Math.random() * 10;
-            if (progress >= 100) {
-                progress = 100;
-                setTimeout(() => {
-                    document.getElementById('loading-screen').classList.add('hidden');
-                    setTimeout(() => {
-                        document.getElementById('loading-screen').remove();
-                    }, 500);
-                }, 1000);
-            }
-            document.getElementById('progress-fill').style.width = progress + '%';
-        }
-
-        function displayTerminalLine() {
-            if (currentLine < terminalLines.length) {
-                const line = terminalLines[currentLine];
-                const output = document.getElementById('terminal-output');
-                const lineDiv = document.createElement('div');
-                lineDiv.className = 'loading-line terminal-text ' + line.class;
-                lineDiv.textContent = line.text;
-                output.appendChild(lineDiv);
-                currentLine++;
-                
-                if (currentLine < terminalLines.length) {
-                    setTimeout(displayTerminalLine, terminalLines[currentLine].delay);
-                }
-            }
-        }
-
-        const progressInterval = setInterval(() => {
-            updateProgress();
-            if (progress >= 100) clearInterval(progressInterval);
-        }, 150);
-
-        setTimeout(displayTerminalLine, 300);
+        
 
         // Matrix Rain Effect
         const matrixCanvas = document.getElementById('matrix-canvas');
