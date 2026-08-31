@@ -1,0 +1,163 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><meta name="description" content="Learn Wireshark for authorized cybersecurity and security auditing labs."><title>Learn Wireshark | Starling Thapa</title><style>
+:root{
+ --bg-primary:#0a0e17;--bg-secondary:#0f1419;--bg-card:#111827;--bg-card-hover:#1a2332;
+ --border:#1f2937;--border-glow:#22c55e;--text-primary:#e5e7eb;--text-secondary:#9ca3af;
+ --text-muted:#6b7280;--accent:#22c55e;--accent-dim:#16a34a;
+ --accent-glow:rgba(34,197,94,.15);--accent-glow-strong:rgba(34,197,94,.3);
+ --danger:#ef4444;--warning:#f59e0b;--info:#3b82f6;--radius:12px;--radius-sm:8px;
+ --transition:all .3s cubic-bezier(.4,0,.2,1);--font-mono:'JetBrains Mono','Courier New',monospace;
+ --font-sans:'Inter',system-ui,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+ background-color:var(--bg-primary);color:var(--text-primary);font-family:var(--font-sans);
+ overflow-x:hidden;line-height:1.6;-webkit-font-smoothing:antialiased;
+ background-image:radial-gradient(circle at 20% 50%,rgba(34,197,94,.08) 0%,transparent 50%),radial-gradient(circle at 80% 20%,rgba(59,130,246,.05) 0%,transparent 40%);
+}
+body:before{
+ content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
+ background-image:linear-gradient(rgba(34,197,94,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(34,197,94,.025) 1px,transparent 1px);
+ background-size:60px 60px;mask-image:radial-gradient(ellipse at center,black 40%,transparent 85%);
+}
+::selection{background:var(--accent-glow-strong);color:var(--text-primary)}
+::-webkit-scrollbar{width:8px}::-webkit-scrollbar-track{background:var(--bg-primary)}
+::-webkit-scrollbar-thumb{background:var(--accent-dim);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:var(--accent)}
+a{color:inherit;text-decoration:none}
+.container{width:min(1120px,92%);margin:auto}
+
+/* Navigation — aligned with the main portfolio */
+.nav{
+ position:sticky;top:0;z-index:100;background:rgba(10,14,23,.88);
+ backdrop-filter:blur(14px);border-bottom:1px solid var(--border);
+}
+.nav-inner{min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.logo{
+ font-family:var(--font-mono);font-size:1.35rem;font-weight:800;color:var(--accent);
+ letter-spacing:-.04em;transition:var(--transition);text-shadow:0 0 20px var(--accent-glow);
+}
+.logo:hover{transform:translateY(-1px);text-shadow:0 0 28px var(--accent-glow-strong)}
+.nav-links{display:flex;align-items:center;gap:1.6rem;list-style:none;font-family:var(--font-mono);font-size:.78rem}
+.nav-links a{color:var(--text-secondary);transition:var(--transition);padding:.45rem 0}
+.nav-links a:hover{color:var(--accent)}
+.nav-links li:last-child a{border:1px solid var(--border);border-radius:var(--radius-sm);padding:.55rem 1rem;color:var(--text-primary)}
+.nav-links li:last-child a:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-glow)}
+
+/* Hero */
+.hero{padding:7rem 0 5rem;border-bottom:1px solid var(--border);position:relative}
+.kicker,.prompt,.num{color:var(--accent);font-family:var(--font-mono)}
+.kicker{font-size:.8rem;letter-spacing:.08em;margin-bottom:1.1rem}
+h1{
+ font-size:clamp(2.6rem,6vw,4.7rem);line-height:1.05;margin-bottom:1.4rem;
+ font-weight:800;letter-spacing:-.045em
+}
+h1 span{color:var(--accent)}
+.hero p{max-width:820px;color:var(--text-secondary);font-size:1.05rem}
+.actions{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:2rem}
+.btn{
+ display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.25rem;border-radius:var(--radius-sm);
+ font-weight:600;font-size:.9rem;font-family:var(--font-sans);cursor:pointer;
+ border:1px solid var(--border);color:var(--text-primary);background:transparent;transition:var(--transition)
+}
+.btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-glow);transform:translateY(-2px)}
+.primary{background:var(--accent);color:var(--bg-primary);border-color:var(--accent);font-weight:700}
+.primary:hover{background:var(--accent-dim);color:var(--bg-primary);box-shadow:0 10px 30px var(--accent-glow)}
+
+/* Sections and cards */
+section{padding:5rem 0}
+.section-head{margin-bottom:1.5rem}
+.num{font-size:.75rem;margin-bottom:.35rem;letter-spacing:.08em}
+h2{font-size:clamp(1.65rem,4vw,2.4rem);margin-bottom:.65rem;font-weight:800;letter-spacing:-.03em}
+.intro{color:var(--text-secondary);max-width:820px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.1rem}
+.card{
+ border:1px solid var(--border);background:var(--bg-card);border-radius:var(--radius);
+ padding:1.6rem;box-shadow:0 12px 35px rgba(0,0,0,.18);transition:var(--transition)
+}
+.card:hover{background:var(--bg-card-hover);border-color:rgba(34,197,94,.45);transform:translateY(-2px);box-shadow:0 15px 40px rgba(0,0,0,.25),0 0 25px var(--accent-glow)}
+.card h3{font-size:1.05rem;margin-bottom:.6rem;font-weight:700}
+.card p{color:var(--text-secondary);font-size:.94rem}
+.card a{color:var(--accent)}
+.card a:hover{text-decoration:underline}
+
+/* Terminal */
+.terminal{
+ border:1px solid var(--border);border-radius:var(--radius);background:#080c12;
+ box-shadow:0 0 30px rgba(0,0,0,.35);margin:1.6rem 0;overflow:hidden
+}
+.terminal-top{
+ padding:.65rem .9rem;border-bottom:1px solid var(--border);color:var(--text-muted);
+ font:500 .72rem var(--font-mono);background:var(--bg-secondary)
+}
+.terminal-body{
+ padding:1.2rem;color:#cbd5e1;overflow-x:auto;font:400 .88rem/1.75 var(--font-mono)
+}
+.terminal-body code{color:var(--accent)}
+
+/* Roadmap / steps */
+.roadmap{display:grid;gap:.8rem}
+.step{
+ display:grid;grid-template-columns:58px 1fr;gap:1rem;border:1px solid var(--border);
+ border-radius:var(--radius-sm);padding:1.1rem 1.2rem;background:rgba(17,24,39,.72);transition:var(--transition)
+}
+.step:hover{border-color:rgba(34,197,94,.4);background:var(--bg-card-hover)}
+.step-num{color:var(--accent);font:700 1.25rem var(--font-mono)}
+.step h3{margin-bottom:.25rem}
+.step p{color:var(--text-secondary);font-size:.9rem}
+.note{
+ border-left:3px solid var(--accent);border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+ padding:1rem 1.2rem;background:var(--accent-glow);color:var(--text-secondary);margin-top:1.25rem
+}
+.danger{border-left-color:var(--warning);background:rgba(245,158,11,.06)}
+.footer{
+ border-top:1px solid var(--border);padding:2.5rem 0;color:var(--text-muted);
+ font:400 .78rem/1.7 var(--font-mono);background:rgba(10,14,23,.55)
+}
+.footer a{color:var(--accent)}
+@media(max-width:700px){
+ .nav-inner{min-height:68px}.nav-links{gap:.7rem;font-size:.68rem}
+ .nav-links li:nth-child(-n+6){display:none}
+ .nav-links li:last-child a{padding:.5rem .8rem}
+ .hero{padding:4.5rem 0 3.5rem}
+ section{padding:3.5rem 0}.grid{grid-template-columns:1fr}
+ .step{grid-template-columns:45px 1fr;padding:1rem}
+ h1{font-size:2.7rem}.hero p{font-size:.98rem}
+}
+</style><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"></head><body>
+<nav class="nav"><div class="container nav-inner"><a class="logo" href="index.html">ST<span class="prompt">_</span></a><ul class="nav-links"><li><a href="#s0">01</a></li><li><a href="#s1">02</a></li><li><a href="#s2">03</a></li><li><a href="#s3">04</a></li><li><a href="#s4">05</a></li><li><a href="#s5">06</a></li><li><a href="index.html">← Home</a></li></ul></div></nav><main><header class="hero"><div class="container"><div class="kicker">$ cat packet_analysis.txt</div><h1>Learn <span>Wireshark</span>.</h1><p>Wireshark is a network protocol analyzer used to capture and inspect network traffic. It is useful for troubleshooting, learning protocols, and investigating authorized security events.</p><div class="actions"><a class="btn primary" href="#roadmap">Start Learning</a><a class="btn" href="index.html">← Back to Portfolio</a></div></div></header><section id="s0"><div class="container"><div class="section-head"><div class="num">01 / what_is_wireshark.txt</div><h2>What is Wireshark?</h2></div><div class="card"><p>Wireshark captures packets from a network interface and presents protocol information in a human-readable form. It can help you understand how applications communicate and diagnose unusual network behavior.</p><p style="margin-top:14px">Wireshark began life as "Ethereal" in 1998 and is now one of the most widely used open-source network analyzers in the world, relied on by network engineers, incident responders, and students alike. It works by putting a network interface into a mode where it can see traffic passing by, then decoding each layer of that traffic using its huge library of built-in protocol dissectors.</p><p style="margin-top:14px">A useful mental model: a scanner like Nmap asks active questions and records the answers, while Wireshark passively watches whatever traffic is already flowing and reconstructs the conversation after the fact.</p></div>
+<div class="terminal" style="margin-top:20px"><div class="terminal-top">diagram · protocol_layers.svg</div><div class="terminal-body" style="padding:24px 20px">
+<svg viewBox="0 0 700 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;overflow:visible;font-family:Consolas,Monaco,'Courier New',monospace">
+<rect x="150" y="10" width="400" height="38" fill="rgba(57,255,136,.05)" stroke="#39ff88" stroke-width="1.2"/>
+<text x="170" y="34" fill="#d7ffe3" font-size="13">Application — HTTP, DNS, TLS</text>
+<rect x="150" y="55" width="400" height="38" fill="rgba(57,255,136,.05)" stroke="#39ff88" stroke-width="1.2"/>
+<text x="170" y="79" fill="#d7ffe3" font-size="13">Transport — TCP / UDP (ports)</text>
+<rect x="150" y="100" width="400" height="38" fill="rgba(57,255,136,.05)" stroke="#39ff88" stroke-width="1.2"/>
+<text x="170" y="124" fill="#d7ffe3" font-size="13">Network — IP (addresses, routing)</text>
+<rect x="150" y="145" width="400" height="38" fill="rgba(57,255,136,.05)" stroke="#39ff88" stroke-width="1.2"/>
+<text x="170" y="169" fill="#d7ffe3" font-size="13">Link — Ethernet / Wi-Fi (local delivery)</text>
+<text x="20" y="30" fill="#8eaa98" font-size="11">You read</text>
+<text x="20" y="45" fill="#8eaa98" font-size="11">top-down</text>
+<line x1="90" y1="55" x2="90" y2="170" stroke="#8eaa98" stroke-width="1" marker-end="url(#a3)"/>
+<defs><marker id="a3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#8eaa98"/></marker></defs>
+</svg>
+<p style="color:#8eaa98;font-size:.8rem;margin-top:10px">Each captured frame is a stack of these layers wrapped inside one another. Wireshark's packet-detail pane mirrors this stack, letting you expand each layer independently.</p>
+</div></div></div></section><section id="s1"><div class="container"><div class="section-head"><div class="num">02 / packet_structure.txt</div><h2>Understanding Packets</h2></div><div class="card"><p>A packet can contain multiple protocol layers. Ethernet or another link layer carries IP, IP carries TCP or UDP, and application protocols such as DNS or HTTP may sit above them. The exact stack depends on the traffic.</p><p style="margin-top:14px">In Wireshark's packet list, each row is one frame; the packet-detail pane below it lets you expand each layer — Frame, Ethernet, IP, TCP/UDP, and finally the application protocol — to see the individual fields Wireshark decoded. The bottom hex pane shows the same data as raw bytes, which is useful once you want to understand exactly how a protocol is structured on the wire.</p></div></div></section><section id="s2"><div class="container"><div class="section-head"><div class="num">03 / common_uses.txt</div><h2>Common Uses</h2></div><div class="card"><p>Troubleshooting connectivity; learning protocols; examining DNS behavior; analyzing TCP connections; investigating authorized incidents; validating whether an application communicates as expected; measuring latency and retransmissions; and confirming that sensitive data is actually encrypted in transit.</p></div><div class="grid" style="margin-top:18px"><div class="card"><p><span class="prompt">[+]</span> Troubleshooting connectivity issues</p></div><div class="card"><p><span class="prompt">[+]</span> Learning protocols hands-on instead of just reading RFCs</p></div><div class="card"><p><span class="prompt">[+]</span> Examining DNS resolution behavior</p></div><div class="card"><p><span class="prompt">[+]</span> Following a TCP conversation end to end</p></div><div class="card"><p><span class="prompt">[+]</span> Investigating authorized incidents and unusual traffic</p></div><div class="card"><p><span class="prompt">[+]</span> Validating that an application communicates as designed</p></div><div class="card"><p><span class="prompt">[+]</span> Spotting retransmissions, resets, and latency spikes</p></div><div class="card"><p><span class="prompt">[+]</span> Confirming that traffic you expect to be encrypted actually is</p></div></div></div></section><section id="s3"><div class="container"><div class="section-head"><div class="num">04 / filters.txt</div><h2>Display Filters</h2></div><div class="card"><p>Display filters help narrow a capture. Examples for a personal lab include <code>dns</code>, <code>http</code>, <code>tcp</code>, and <code>ip.addr == 127.0.0.1</code>. These filters select packets for viewing; they do not change the captured traffic.</p><p style="margin-top:14px">It's worth knowing the difference between a <strong>capture filter</strong> (set before you start capturing, using a more limited syntax, and it determines what gets recorded at all) and a <strong>display filter</strong> (applied after the fact, using Wireshark's richer syntax, and it only changes what you currently see — nothing already captured is discarded). A few more display-filter examples worth trying on your own lab captures: <code>tcp.port == 443</code>, <code>http.request</code>, and <code>tcp.flags.syn == 1</code> to isolate connection attempts.</p></div></div></section><section id="s4"><div class="container"><div class="section-head"><div class="num">05 / safe_examples.txt</div><h2>Safe Lab Examples</h2></div><div class="card"><p>Capture traffic generated by your own browser or a local application. Start a capture on the correct interface, visit a local test site, stop the capture, and inspect the DNS, TCP, and application-level exchanges.</p><p style="margin-top:14px">A good first exercise: capture while visiting a single local site, then use Wireshark's "Follow → TCP Stream" feature on one connection to see the request/response exchange reassembled as readable text. This makes the abstract idea of "a TCP connection" concrete.</p></div><div class="terminal"><div class="terminal-top">student@starling:~$ security-lab --authorized</div><div class="terminal-body"><code>[SAFE LAB]</code> Use only a system you own or have explicit permission to test.<br>&gt; Build an isolated practice environment.<br>&gt; Observe the tool's output.<br>&gt; Document findings.<br>&gt; Fix the issue.<br>&gt; Test again.</div></div></div></section><section id="s5"><div class="container"><div class="section-head"><div class="num">06 / practical_lab.txt</div><h2>Practical Lab</h2></div><div class="card"><p>Capture a short session, identify DNS queries, follow a TCP conversation, locate the client and server addresses, and note which protocols are visible. Repeat the exercise with encrypted HTTPS traffic and compare what information remains observable.</p></div>
+<div class="roadmap" style="margin-top:18px">
+<div class="step"><div class="step-num">1</div><p>Start a capture, then generate a small, predictable amount of traffic — a couple of page loads or a ping.</p></div>
+<div class="step"><div class="step-num">2</div><p>Filter to <code>dns</code> and note every name your machine looked up, including ones you didn't expect.</p></div>
+<div class="step"><div class="step-num">3</div><p>Filter to one TCP conversation and use Follow → TCP Stream to read the whole exchange.</p></div>
+<div class="step"><div class="step-num">4</div><p>Repeat the capture against an HTTPS site and compare — you'll still see the handshake and metadata, but not the encrypted payload.</p></div>
+<div class="step"><div class="step-num">5</div><p>Write down, in your own words, what an observer on the network path could and couldn't learn from each capture.</p></div>
+</div></div></section><section id="s6"><div class="container"><div class="section-head"><div class="num">07 / defensive_view.txt</div><h2>Defensive Perspective</h2></div><div class="card"><p>Packet analysis can reveal misconfigurations, unexpected connections, protocol misuse, and signs of compromise. Encryption protects application content, but metadata such as endpoints and timing can still provide useful information.</p><p style="margin-top:14px">Defenders often build a baseline of "normal" traffic for a network segment so that anomalies — an internal machine suddenly talking to an unfamiliar address, an unexpected protocol on a well-known port, or a burst of DNS lookups to newly registered domains — stand out. Packet captures are also a core piece of evidence during incident response, which is why many organizations retain them for a defined period.</p></div></div></section>
+<section id="s7"><div class="container"><div class="section-head"><div class="num">08 / ethics_and_law.txt</div><h2>Ethics &amp; Legal Considerations</h2></div><div class="card"><p>Capturing network traffic that belongs to other people — for example, on a shared Wi-Fi network you don't administer, or a corporate network without authorization — can violate wiretap, privacy, or computer-misuse laws even if you never act on what you see. Only capture traffic on networks and devices you own, administer, or have explicit written permission to monitor.</p></div>
+<div class="note danger">Even in an authorized capture, avoid storing more sensitive data than your exercise needs, and delete lab captures once you're done with them.</div></div></section><section id="roadmap"><div class="container"><div class="section-head"><div class="num">09 / learning_roadmap.txt</div><h2>Learning Roadmap</h2></div><div class="card"><p>Learn Ethernet/IP → TCP/UDP → DNS → HTTP/HTTPS → Wireshark interface → display filters → TCP stream analysis → basic incident investigation.</p></div>
+<div class="roadmap" style="margin-top:18px">
+<div class="step"><div class="step-num">1</div><p>Ethernet &amp; IP — local delivery and addressing.</p></div>
+<div class="step"><div class="step-num">2</div><p>TCP &amp; UDP — connection state vs. stateless delivery.</p></div>
+<div class="step"><div class="step-num">3</div><p>DNS — how names become addresses.</p></div>
+<div class="step"><div class="step-num">4</div><p>HTTP/HTTPS — the application layer most traffic rides on.</p></div>
+<div class="step"><div class="step-num">5</div><p>The Wireshark interface — packet list, detail pane, hex pane.</p></div>
+<div class="step"><div class="step-num">6</div><p>Display filters — narrowing a capture to what matters.</p></div>
+<div class="step"><div class="step-num">7</div><p>TCP stream analysis and basic, authorized incident investigation.</p></div>
+</div></div></section></main><footer class="footer"><div class="container"><p><span class="prompt">root@starling:~$</span> echo "Learn ethically. Test responsibly."</p><p style="margin-top:8px">© 2026 Starling Thapa · Security Tools Learning Series</p></div></footer></body></html>

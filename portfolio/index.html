@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Starling Thapa | Ethical Hacker & Developer</title>
+    <meta name="description" content="Ethical Hacker & Software Designer specializing in security assessments, penetration testing, and building innovative software solutions.">
+    <meta name="author" content="Starling Thapa">
+    <meta name="keywords" content="ethical hacking, cybersecurity, web development, software design, penetration testing, security consulting, CTF, bug bounty">
+    <meta property="og:title" content="Starling Thapa | Ethical Hacker & Developer">
+    <meta property="og:description" content="Securing digital landscapes through ethical hacking and innovative software solutions.">
+    <meta property="og:type" content="website">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #0f1419;
+            --bg-card: #111827;
+            --bg-card-hover: #1a2332;
+            --border: #1f2937;
+            --border-glow: #22c55e;
+            --text-primary: #e5e7eb;
+            --text-secondary: #9ca3af;
+            --text-muted: #6b7280;
+            --accent: #22c55e;
+            --accent-dim: #16a34a;
+            --accent-glow: rgba(34, 197, 94, 0.15);
+            --accent-glow-strong: rgba(34, 197, 94, 0.3);
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --radius: 12px;
+            --radius-sm: 8px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+            --font-sans: 'Inter', system-ui, sans-serif;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            overflow-x: hidden;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--accent-dim); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+        ::selection { background: var(--accent-glow-strong); color: var(--text-primary); }
+        .bg-grid {
+            position: fixed; inset: 0;
+            background-image: linear-gradient(rgba(34,197,94,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(34,197,94,0.03) 1px, transparent 1px);
+            background-size: 60px 60px; pointer-events: none; z-index: 0;
+            mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+        }
+        .bg-glow {
+            position: fixed; inset: 0; pointer-events: none; z-index: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(34,197,94,0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(59,130,246,0.05) 0%, transparent 40%);
+        }
+        /* Navigation */
+        nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; transition: var(--transition); background: transparent; border-bottom: 1px solid transparent; }
+        nav.scrolled { background: rgba(10,14,23,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+        .nav-content { display: flex; align-items: center; justify-content: space-between; height: 72px; max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
+        .logo { font-family: var(--font-mono); font-size: 1.25rem; font-weight: 700; color: var(--accent); text-decoration: none; display: flex; align-items: center; gap: 0.5rem; }
+        .logo::before { content: '<'; color: var(--text-muted); }
+        .logo::after { content: '/>'; color: var(--text-muted); }
+        .nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
+        .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: var(--transition); position: relative; padding: 0.5rem 0; }
+        .nav-links a:hover { color: var(--accent); }
+        .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background: var(--accent); transition: width 0.3s; border-radius: 2px; }
+        .nav-links a:hover::after { width: 100%; }
+        .nav-cta { background: var(--accent); color: var(--bg-primary) !important; padding: 0.5rem 1.25rem !important; border-radius: var(--radius-sm); font-weight: 600 !important; font-size: 0.85rem !important; }
+        .nav-cta:hover { background: var(--accent-dim); box-shadow: 0 0 20px var(--accent-glow); }
+        .nav-cta::after { display: none !important; }
+        .mobile-menu-btn { display: none; background: none; border: 1px solid var(--border); color: var(--text-primary); padding: 0.5rem; border-radius: var(--radius-sm); cursor: pointer; transition: var(--transition); }
+        .mobile-menu-btn:hover { border-color: var(--accent); color: var(--accent); }
+        .mobile-menu { position: fixed; top: 72px; left: 0; right: 0; background: rgba(10,14,23,0.98); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); padding: 1.5rem; z-index: 999; transform: translateY(-100%); opacity: 0; pointer-events: none; transition: all 0.3s ease; }
+        .mobile-menu.active { transform: translateY(0); opacity: 1; pointer-events: all; }
+        .mobile-menu ul { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
+        .mobile-menu a { color: var(--text-secondary); text-decoration: none; font-size: 1rem; font-weight: 500; display: block; padding: 0.75rem; border-radius: var(--radius-sm); transition: var(--transition); }
+        .mobile-menu a:hover { background: var(--bg-card); color: var(--accent); }
+        /* Hero */
+        #home { min-height: 100vh; display: flex; align-items: center; padding-top: 72px; position: relative; z-index: 1; }
+        .hero-container { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; width: 100%; }
+        .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+        .hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--accent-glow); border: 1px solid rgba(34,197,94,0.2); color: var(--accent); padding: 0.5rem 1rem; border-radius: 100px; font-size: 0.85rem; font-weight: 500; margin-bottom: 1.5rem; font-family: var(--font-mono); }
+        .hero-badge .pulse { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+        .hero-title { font-size: 3.5rem; font-weight: 800; line-height: 1.1; margin-bottom: 1rem; letter-spacing: -0.02em; }
+        .hero-title .gradient { background: linear-gradient(135deg, var(--accent), #4ade80); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .hero-subtitle { font-family: var(--font-mono); font-size: 1.25rem; color: var(--accent); margin-bottom: 1.5rem; min-height: 2rem; }
+        .hero-description { color: var(--text-secondary); font-size: 1.1rem; line-height: 1.8; margin-bottom: 2rem; max-width: 540px; }
+        .hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .btn { padding: 0.875rem 2rem; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; transition: var(--transition); text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; border: none; font-size: 0.95rem; font-family: var(--font-sans); }
+        .btn-primary { background: var(--accent); color: var(--bg-primary); }
+        .btn-primary:hover { background: var(--accent-dim); transform: translateY(-2px); box-shadow: 0 10px 30px var(--accent-glow); }
+        .btn-outline { background: transparent; color: var(--text-primary); border: 1px solid var(--border); }
+        .btn-outline:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-glow); }
+        .btn-sm { padding: 0.625rem 1.25rem; font-size: 0.875rem; }
+        .hero-image-wrapper { display: flex; justify-content: center; position: relative; }
+        .hero-image-frame { position: relative; width: 320px; height: 320px; }
+        .hero-image-bg { position: absolute; inset: -20px; background: linear-gradient(135deg, var(--accent-glow), rgba(59,130,246,0.1)); border-radius: 24px; transform: rotate(-6deg); transition: var(--transition); }
+        .hero-image-frame:hover .hero-image-bg { transform: rotate(-3deg) scale(1.02); }
+        .scan-container { position: relative; width: 100%; height: 100%; border: 2px solid var(--accent); border-radius: 20px; overflow: hidden; background: var(--bg-card); box-shadow: 0 0 40px var(--accent-glow); }
+        .profile-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .scan-line { position: absolute; left: 0; width: 100%; height: 3px; background: var(--accent); box-shadow: 0 0 20px var(--accent), 0 0 40px var(--accent); animation: scanMove 2.5s ease-in-out infinite; }
+        @keyframes scanMove { 0%,100% { top: 0%; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 50% { top: 100%; } }
+        .scan-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 50%, rgba(34,197,94,0.05) 50%); background-size: 100% 4px; pointer-events: none; }
+        .hero-stats { position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); display: flex; gap: 1.5rem; background: var(--bg-card); border: 1px solid var(--border); padding: 1rem 1.5rem; border-radius: var(--radius); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .hero-stat { text-align: center; }
+        .hero-stat-value { font-family: var(--font-mono); font-size: 1.25rem; font-weight: 700; color: var(--accent); }
+        .hero-stat-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        /* Sections Base */
+        section { padding: 6rem 0; position: relative; z-index: 1; }
+        .section-container { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
+        .section-header { margin-bottom: 4rem; text-align: center; }
+        .section-label { font-family: var(--font-mono); font-size: 0.875rem; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0.75rem; display: block; }
+        .section-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem; letter-spacing: -0.02em; }
+        .section-desc { color: var(--text-secondary); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+        /* Stats Bar */
+        .stats-bar { background: var(--bg-card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 3rem 0; }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; text-align: center; }
+        .stat-item { position: relative; }
+        .stat-item:not(:last-child)::after { content: ''; position: absolute; right: 0; top: 50%; transform: translateY(-50%); width: 1px; height: 40px; background: var(--border); }
+        .stat-number { font-family: var(--font-mono); font-size: 2.5rem; font-weight: 700; color: var(--accent); line-height: 1; margin-bottom: 0.5rem; }
+        .stat-label { font-size: 0.875rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        /* About */
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+        .about-content h3 { font-size: 1.75rem; margin-bottom: 1rem; font-weight: 700; }
+        .about-content p { color: var(--text-secondary); margin-bottom: 1.25rem; line-height: 1.8; }
+        .about-tags { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
+        .about-tag { background: var(--bg-secondary); border: 1px solid var(--border); color: var(--text-secondary); padding: 0.5rem 1rem; border-radius: 100px; font-size: 0.875rem; font-family: var(--font-mono); transition: var(--transition); }
+        .about-tag:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-glow); }
+        .about-terminal { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+        .terminal-header { display: flex; align-items: center; gap: 0.5rem; padding: 0.875rem 1rem; background: var(--bg-secondary); border-bottom: 1px solid var(--border); }
+        .terminal-dot { width: 12px; height: 12px; border-radius: 50%; }
+        .terminal-dot.red { background: var(--danger); }
+        .terminal-dot.yellow { background: var(--warning); }
+        .terminal-dot.green { background: var(--accent); }
+        .terminal-title { margin-left: auto; font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted); }
+        .terminal-body { padding: 1.5rem; font-family: var(--font-mono); font-size: 0.9rem; line-height: 1.8; }
+        .terminal-line { margin-bottom: 0.5rem; }
+        .terminal-line .comment { color: var(--text-muted); }
+        .terminal-line .keyword { color: #c084fc; }
+        .terminal-line .string { color: #4ade80; }
+        .terminal-line .func { color: #60a5fa; }
+        .terminal-line .num { color: #fbbf24; }
+        /* Services */
+        .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+        .service-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; transition: var(--transition); position: relative; overflow: hidden; }
+        .service-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: linear-gradient(90deg, var(--accent), transparent); transform: scaleX(0); transform-origin: left; transition: transform 0.3s; }
+        .service-card:hover::before { transform: scaleX(1); }
+        .service-card:hover { border-color: rgba(34,197,94,0.3); transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+        .service-icon { width: 56px; height: 56px; background: var(--accent-glow); border: 1px solid rgba(34,197,94,0.2); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; transition: var(--transition); }
+        .service-card:hover .service-icon { background: var(--accent); box-shadow: 0 0 20px var(--accent-glow); }
+        .service-icon svg { width: 28px; height: 28px; stroke: var(--accent); transition: var(--transition); }
+        .service-card:hover .service-icon svg { stroke: var(--bg-primary); }
+        .service-card h3 { font-size: 1.25rem; margin-bottom: 0.75rem; font-weight: 600; }
+        .service-card p { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7; }
+        .service-list { margin-top: 1rem; list-style: none; }
+        .service-list li { color: var(--text-muted); font-size: 0.875rem; padding: 0.25rem 0; display: flex; align-items: center; gap: 0.5rem; }
+        .service-list li::before { content: '>'; color: var(--accent); font-weight: bold; }
+        /* Skills */
+        .skills-wrapper { display: grid; grid-template-columns: repeat(2, 1fr); gap: 3rem; }
+        .skill-category { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; }
+        .skill-category-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; }
+        .skill-category-icon { width: 48px; height: 48px; background: var(--accent-glow); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; }
+        .skill-category-icon svg { width: 24px; height: 24px; stroke: var(--accent); }
+        .skill-category h3 { font-size: 1.25rem; font-weight: 600; }
+        .skill-category p { color: var(--text-muted); font-size: 0.875rem; }
+        .skill-item-row { margin-bottom: 1.25rem; }
+        .skill-item-header { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+        .skill-item-name { font-size: 0.9rem; font-weight: 500; color: var(--text-secondary); }
+        .skill-item-percent { font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent); }
+        .skill-bar { height: 6px; background: var(--bg-secondary); border-radius: 3px; overflow: hidden; }
+        .skill-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent-dim), var(--accent)); border-radius: 3px; transition: width 1.5s ease; width: 0%; }
+        .skill-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; }
+        .skill-tag { background: var(--bg-secondary); border: 1px solid var(--border); color: var(--text-muted); padding: 0.375rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-family: var(--font-mono); transition: var(--transition); }
+        .skill-tag:hover { border-color: var(--accent); color: var(--accent); }
+        /* Projects */
+        .projects-filter { display: flex; justify-content: center; gap: 0.75rem; margin-bottom: 3rem; flex-wrap: wrap; }
+        .filter-btn { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); padding: 0.625rem 1.25rem; border-radius: 100px; cursor: pointer; font-size: 0.875rem; font-weight: 500; transition: var(--transition); font-family: var(--font-sans); }
+        .filter-btn:hover, .filter-btn.active { background: var(--accent-glow); border-color: var(--accent); color: var(--accent); }
+        .projects-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+        .project-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: var(--transition); position: relative; }
+        .project-card:hover { transform: translateY(-5px); border-color: rgba(34,197,94,0.3); box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+        .project-image { height: 200px; background: linear-gradient(135deg, var(--bg-secondary), #1a2332); position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        .project-image::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, var(--bg-card), transparent); }
+        .project-icon { width: 64px; height: 64px; background: var(--accent-glow); border: 1px solid rgba(34,197,94,0.2); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; z-index: 1; transition: var(--transition); }
+        .project-card:hover .project-icon { transform: scale(1.1); box-shadow: 0 0 30px var(--accent-glow); }
+        .project-icon svg { width: 32px; height: 32px; stroke: var(--accent); }
+        .project-content { padding: 1.5rem; }
+        .project-tags { display: flex; gap: 0.5rem; margin-bottom: 0.75rem; flex-wrap: wrap; }
+        .project-tag { font-size: 0.75rem; color: var(--accent); background: var(--accent-glow); padding: 0.25rem 0.625rem; border-radius: 4px; font-family: var(--font-mono); }
+        .project-content h3 { font-size: 1.125rem; margin-bottom: 0.5rem; font-weight: 600; }
+        .project-content p { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1rem; }
+        .project-links { display: flex; gap: 1rem; }
+        .project-link { color: var(--text-muted); text-decoration: none; font-size: 0.875rem; display: flex; align-items: center; gap: 0.375rem; transition: var(--transition); }
+        .project-link:hover { color: var(--accent); }
+        /* Experience Timeline */
+        .timeline { position: relative; max-width: 800px; margin: 0 auto; }
+        .timeline::before { content: ''; position: absolute; left: 50%; transform: translateX(-50%); width: 2px; height: 100%; background: linear-gradient(to bottom, var(--accent), transparent); }
+        .timeline-item { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-bottom: 3rem; position: relative; }
+        .timeline-item:nth-child(even) .timeline-content { grid-column: 2; }
+        .timeline-item:nth-child(even) .timeline-date { grid-column: 1; text-align: right; }
+        .timeline-dot { position: absolute; left: 50%; top: 0; transform: translateX(-50%); width: 16px; height: 16px; background: var(--accent); border: 4px solid var(--bg-primary); border-radius: 50%; box-shadow: 0 0 0 2px var(--accent); }
+        .timeline-content { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; transition: var(--transition); }
+        .timeline-content:hover { border-color: rgba(34,197,94,0.3); transform: translateX(5px); }
+        .timeline-item:nth-child(even) .timeline-content:hover { transform: translateX(-5px); }
+        .timeline-date { font-family: var(--font-mono); font-size: 0.875rem; color: var(--accent); font-weight: 600; padding-top: 0.5rem; }
+        .timeline-content h3 { font-size: 1.125rem; margin-bottom: 0.25rem; font-weight: 600; }
+        .timeline-content .company { color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 0.75rem; }
+        .timeline-content p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
+        /* Certifications */
+        .certs-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+        .cert-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem 1.5rem; text-align: center; transition: var(--transition); position: relative; overflow: hidden; }
+        .cert-card:hover { border-color: rgba(34,197,94,0.3); transform: translateY(-5px); }
+        .cert-badge { width: 64px; height: 64px; background: var(--accent-glow); border: 1px solid rgba(34,197,94,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; }
+        .cert-badge svg { width: 32px; height: 32px; stroke: var(--accent); }
+        .cert-card h3 { font-size: 1rem; margin-bottom: 0.5rem; font-weight: 600; }
+        .cert-card p { color: var(--text-muted); font-size: 0.85rem; }
+        .cert-date { display: inline-block; margin-top: 0.75rem; font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent); background: var(--accent-glow); padding: 0.25rem 0.75rem; border-radius: 100px; }
+        /* Testimonials */
+        .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+        .testimonial-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; position: relative; transition: var(--transition); }
+        .testimonial-card:hover { border-color: rgba(34,197,94,0.2); transform: translateY(-3px); }
+        .testimonial-quote { position: absolute; top: 1.5rem; right: 1.5rem; font-size: 4rem; line-height: 1; color: var(--accent); opacity: 0.2; font-family: Georgia, serif; }
+        .testimonial-text { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.8; margin-bottom: 1.5rem; position: relative; z-index: 1; }
+        .testimonial-author { display: flex; align-items: center; gap: 1rem; }
+        .testimonial-avatar { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-dim), var(--accent)); display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--bg-primary); font-size: 1.1rem; }
+        .testimonial-info h4 { font-size: 0.95rem; font-weight: 600; }
+        .testimonial-info p { font-size: 0.85rem; color: var(--text-muted); }
+        /* Contact — terminal / contact-card layout */
+        .contact-wrapper {
+            display: grid;
+            grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+            gap: 3.75rem;
+            align-items: stretch;
+        }
+        .contact-info-panel { min-width: 0; }
+        .contact-info-panel > h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-weight: 700;
+        }
+        .contact-info-panel > p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+        .contact-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 0;
+        }
+        .contact-method {
+            min-height: 94px;
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            padding: 1.25rem 1.5rem;
+            background: rgba(255,255,255,0.025);
+            border: 1px solid #2a2f35;
+            border-radius: 10px;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: var(--transition);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+        }
+        .contact-method:hover {
+            border-color: rgba(34,197,94,0.55);
+            background: rgba(34,197,94,0.045);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.22);
+        }
+        .contact-method-icon {
+            width: 50px;
+            height: 50px;
+            background: #101316;
+            border: 1px solid #242a30;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .contact-method-icon svg {
+            width: 24px;
+            height: 24px;
+            stroke: var(--accent);
+        }
+        .contact-method-info h4 {
+            font-family: var(--font-mono);
+            font-size: 0.76rem;
+            font-weight: 400;
+            color: #555c63;
+            margin-bottom: 0.3rem;
+            letter-spacing: 0.03em;
+        }
+        .contact-method-info p,
+        .contact-method-value {
+            font-size: 0.98rem;
+            color: #f0f2f4;
+            font-weight: 500;
+            margin: 0;
+        }
+        .contact-method-value { word-break: break-word; }
+        .contact-terminal {
+            height: 100%;
+            min-height: 340px;
+            background: #080a0b;
+            border: 1px solid #2a2f35;
+            border-radius: 11px;
+            overflow: hidden;
+            box-shadow: 0 24px 60px rgba(0,0,0,0.32);
+            font-family: var(--font-mono);
+        }
+        .contact-terminal .terminal-header {
+            height: 42px;
+            padding: 0 1rem;
+            background: #111315;
+            border-bottom: 1px solid #20252a;
+        }
+        .contact-terminal .terminal-dot { width: 12px; height: 12px; }
+        .contact-terminal .terminal-body {
+            padding: 1.5rem 1.35rem 1.75rem;
+            font-size: 0.88rem;
+            line-height: 2;
+            color: #737b83;
+        }
+        .contact-terminal-line { margin: 0 0 1.1rem; }
+        .contact-terminal-line:last-child { margin-bottom: 0; }
+        .terminal-prompt { color: var(--accent); }
+        .terminal-command { color: #e7eaed; }
+        .terminal-output { color: #626a72; padding-left: 1.25rem; }
+        .terminal-success { color: var(--accent); }
+        .terminal-value { color: #858d95; }
+        .terminal-metric { color: #32d583; }
+        .contact-social-row { display: none; }
+        /* Footer */
+        footer { background: var(--bg-secondary); border-top: 1px solid var(--border); padding: 4rem 0 2rem; position: relative; z-index: 1; }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+        .footer-brand .logo { margin-bottom: 1rem; display: inline-flex; }
+        .footer-brand p { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7; margin-bottom: 1.5rem; }
+        .footer-brand .social-grid { display: flex; gap: 0.75rem; align-items: center; }
+        .footer-brand .social-btn { width: 44px; height: 44px; padding: 0; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); display: inline-flex; align-items: center; justify-content: center; color: var(--text-secondary); text-decoration: none; transition: var(--transition); box-sizing: border-box; }
+        .footer-brand .social-btn:hover { background: var(--accent); border-color: var(--accent); color: var(--bg-primary); transform: translateY(-3px); box-shadow: 0 10px 20px var(--accent-glow); }
+        .footer-brand .social-btn svg { display: block; width: 20px; height: 20px; max-width: 20px; max-height: 20px; flex: 0 0 20px; }
+        .footer-section h4 { font-size: 0.9rem; font-weight: 600; color: var(--text-primary); margin-bottom: 1.25rem; text-transform: uppercase; letter-spacing: 1px; }
+        .footer-links { list-style: none; }
+        .footer-links li { margin-bottom: 0.75rem; }
+        .footer-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: var(--transition); }
+        .footer-links a:hover { color: var(--accent); }
+        .footer-bottom { border-top: 1px solid var(--border); padding-top: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        .footer-copyright { color: var(--text-muted); font-size: 0.875rem; font-family: var(--font-mono); }
+        .scroll-top { width: 40px; height: 40px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: var(--transition); }
+        .scroll-top:hover { background: var(--accent); border-color: var(--accent); color: var(--bg-primary); transform: translateY(-3px); }
+        /* Toast */
+        .toast-container { position: fixed; bottom: 2rem; right: 2rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.75rem; }
+        .toast { background: var(--bg-card); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: var(--radius-sm); padding: 1rem 1.5rem; box-shadow: 0 10px 30px rgba(0,0,0,0.3); animation: toastSlide 0.3s ease; max-width: 380px; }
+        @keyframes toastSlide { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .toast-title { font-weight: 600; margin-bottom: 0.25rem; }
+        .toast-desc { font-size: 0.875rem; color: var(--text-secondary); }
+        /* Animations */
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .contact-wrapper { grid-template-columns: 1fr; gap: 2rem; }
+            .contact-terminal { min-height: 300px; }
+            .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 3rem; }
+            .hero-description { margin: 0 auto 2rem; }
+            .hero-buttons { justify-content: center; }
+            .hero-image-wrapper { order: -1; }
+            .hero-image-frame { width: 280px; height: 280px; }
+            .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+            .skills-wrapper { grid-template-columns: 1fr; }
+            .projects-grid { grid-template-columns: repeat(2, 1fr); }
+            .certs-grid { grid-template-columns: repeat(2, 1fr); }
+            .contact-wrapper { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .mobile-menu-btn { display: block; }
+            .hero-title { font-size: 2.5rem; }
+            .section-title { font-size: 2rem; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .stat-item:nth-child(2)::after { display: none; }
+            .services-grid { grid-template-columns: 1fr; }
+            .projects-grid { grid-template-columns: 1fr; }
+            .testimonials-grid { grid-template-columns: 1fr; }
+            .certs-grid { grid-template-columns: 1fr; }
+            .timeline::before { left: 20px; }
+            .timeline-item { grid-template-columns: 1fr !important; padding-left: 50px; }
+            .timeline-dot { left: 20px !important; transform: translateX(-50%); }
+            .timeline-date { text-align: left !important; margin-bottom: 0.5rem; }
+            .timeline-content { grid-column: 1 !important; }
+            .footer-grid { grid-template-columns: 1fr; }
+            .form-row { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 480px) {
+            .hero-title { font-size: 2rem; }
+            .hero-image-frame { width: 240px; height: 240px; }
+            .hero-stats { gap: 1rem; padding: 0.75rem 1rem; }
+            section { padding: 4rem 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+
+    <nav id="nav">
+        <div class="nav-content">
+            <a href="#home" class="logo">ST</a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#security-tools">Security Tools</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact" class="nav-cta">Contact</a></li>
+            </ul>
+            <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle menu">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            </button>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobile-menu">
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#security-tools">Security Tools</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </div>
+
+    <section id="home">
+        <div class="hero-container">
+            <div class="hero-grid">
+                <div class="hero-content">
+                    <div class="hero-badge reveal">
+                        <span class="pulse"></span>
+                        Available for freelance work
+                    </div>
+                    <h1 class="hero-title reveal reveal-delay-1">
+                        Starling <span class="gradient">Thapa</span>
+                    </h1>
+                    <div class="hero-subtitle reveal reveal-delay-2" id="typewriter"></div>
+                    <p class="hero-description reveal reveal-delay-2">
+                        Protecting digital landscapes through ethical hacking and innovative 
+                        software solutions. Specializing in security assessments, penetration testing, 
+                        and building robust, scalable applications.
+                    </p>
+                    <div class="hero-buttons reveal reveal-delay-3">
+                        <a href="#contact" class="btn btn-primary">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                            Get In Touch
+                        </a>
+                        <a href="#projects" class="btn btn-outline">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                            View Projects
+                        </a>
+                    </div>
+                </div>
+                <div class="hero-image-wrapper reveal reveal-delay-2">
+                    <div class="hero-image-frame">
+                        <div class="hero-image-bg"></div>
+                        <div class="scan-container">
+                            <img src="starling.png" class="profile-img" alt="Starling Thapa">
+                            <div class="scan-line"></div>
+                            <div class="scan-overlay"></div>
+                        </div>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="hero-stat"><div class="hero-stat-value">2+</div><div class="hero-stat-label">Years</div></div>
+                        <div class="hero-stat"><div class="hero-stat-value">30+</div><div class="hero-stat-label">Projects</div></div>
+                        <div class="hero-stat"><div class="hero-stat-value">4+</div><div class="hero-stat-label">Certifications</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="stats-bar">
+        <div class="section-container">
+            <div class="stats-grid">
+                <div class="stat-item"><div class="stat-number" data-count="2">0</div><div class="stat-label">Years Experience</div></div>
+                <div class="stat-item"><div class="stat-number" data-count="30">0</div><div class="stat-label">Projects Completed</div></div>
+                <div class="stat-item"><div class="stat-number" data-count="4">0</div><div class="stat-label">Certifications</div></div>
+            </div>
+        </div>
+    </div>
+
+    <section id="about">
+        <div class="section-container">
+            <div class="section-header reveal">
+                <span class="section-label">$ whoami</span>
+                <h2 class="section-title">About Me</h2>
+                <p class="section-desc">Passionate about securing the digital world through code and creativity.</p>
+            </div>
+            <div class="about-grid">
+                <div class="about-content reveal">
+                    <h3>Ethical Hacker & Software Architect</h3>
+                    <p>I'm an experienced ethical hacker with a deep passion for software design and cybersecurity. With over 5 years in the industry, I've helped organizations identify vulnerabilities, secure their infrastructure, and build resilient software solutions.</p>
+                    <p>My approach combines offensive security thinking with solid engineering practices. I believe the best defense is understanding the attack, which is why I continuously research emerging threats and develop innovative countermeasures.</p>
+                    <p>When I'm not hunting bugs or writing exploits, you'll find me contributing to open-source security tools, participating in CTF competitions, or mentoring aspiring security professionals.</p>
+                    <div class="about-tags">
+                        <span class="about-tag">Penetration Testing</span>
+                        <span class="about-tag">Bug Bounty</span>
+                        <span class="about-tag">Red Teaming</span>
+                        <span class="about-tag">Secure Coding</span>
+                        <span class="about-tag">OSCP</span>
+                        <span class="about-tag">Web3 Security</span>
+                        <span class="about-tag">Cloud Security</span>
+                        <span class="about-tag">DevSecOps</span>
+                    </div>
+                </div>
+                <div class="about-terminal reveal reveal-delay-2">
+                    <div class="terminal-header">
+                        <div class="terminal-dot red"></div>
+                        <div class="terminal-dot yellow"></div>
+                        <div class="terminal-dot green"></div>
+                        <span class="terminal-title">starling@portfolio:~</span>
+                    </div>
+                    <div class="terminal-body">
+                        <div class="terminal-line"><span class="comment">// Profile Configuration</span></div>
+                        <div class="terminal-line"><span class="keyword">const</span> profile = {</div>
+                        <div class="terminal-line">  name: <span class="string">"Starling Thapa"</span>,</div>
+                        <div class="terminal-line">  role: <span class="string">"Ethical Hacker"</span>,</div>
+                        <div class="terminal-line">  location: <span class="string">"Nepal"</span>,</div>
+                        <div class="terminal-line">  focus: [<span class="string">"Web Sec"</span>, <span class="string">"App Sec"</span>],</div>
+                        <div class="terminal-line">  status: <span class="string">"Available"</span>,</div>
+                        <div class="terminal-line">  coffee: <span class="num">Infinity</span></div>
+                        <div class="terminal-line">};</div>
+                        <div class="terminal-line"></div>
+                        <div class="terminal-line"><span class="func">console</span>.log(<span class="string">"Let's secure the web!"</span>);</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" style="background: var(--bg-secondary);">
+        <div class="section-container">
+            <div class="section-header reveal">
+                <span class="section-label">$ ls services/</span>
+                <h2 class="section-title">What I Do</h2>
+                <p class="section-desc">Comprehensive security and development services tailored to your needs.</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card reveal">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    </div>
+                    <h3>Penetration Testing</h3>
+                    <p>Comprehensive security assessments to identify and exploit vulnerabilities before malicious actors do.</p>
+                    <ul class="service-list">
+                        <li>Web Application Testing</li>
+                        <li>Network Infrastructure</li>
+                        <li>API Security Assessment</li>
+                        <li>Mobile App Testing</li>
+                    </ul>
+                </div>
+                <div class="service-card reveal reveal-delay-1">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                    </div>
+                    <h3>Security Consulting</h3>
+                    <p>Strategic security guidance to help organizations build and maintain robust security postures.</p>
+                    <ul class="service-list">
+                        <li>Security Architecture Review</li>
+                        <li>Compliance Assessment</li>
+                        <li>Incident Response Planning</li>
+                        <li>Security Awareness Training</li>
+                    </ul>
+                </div>
+                <div class="service-card reveal reveal-delay-2">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                    </div>
+                    <h3>Secure Development</h3>
+                    <p>Building robust, scalable applications with security integrated from the ground up.</p>
+                    <ul class="service-list">
+                        <li>Full-Stack Web Development</li>
+                        <li>Secure API Design</li>
+                        <li>Code Review & Auditing</li>
+                        <li>DevSecOps Implementation</li>
+                    </ul>
+                </div>
+                <div class="service-card reveal reveal-delay-3">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+                    </div>
+                    <h3>Bug Bounty Hunting</h3>
+                    <p>Active participation in bug bounty programs to discover and responsibly disclose vulnerabilities.</p>
+                    <ul class="service-list">
+                        <li>HackerOne & Bugcrowd</li>
+                        <li>Private Programs</li>
+                        <li>CVE Discovery</li>
+                        <li>Responsible Disclosure</li>
+                    </ul>
+                </div>
+                <div class="service-card reveal reveal-delay-1">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    </div>
+                    <h3>Red Team Operations</h3>
+                    <p>Simulated adversarial attacks to test your organization's detection and response capabilities.</p>
+                    <ul class="service-list">
+                        <li>Social Engineering</li>
+                        <li>Physical Security Testing</li>
+                        <li>Advanced Persistent Threats</li>
+                        <li>Lateral Movement Simulation</li>
+                    </ul>
+                </div>
+                <div class="service-card reveal reveal-delay-2">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+                    </div>
+                    <h3>CTF & Training</h3>
+                    <p>Custom CTF challenges and hands-on training programs to upskill security teams.</p>
+                    <ul class="service-list">
+                        <li>Custom CTF Development</li>
+                        <li>Workshop Facilitation</li>
+                        <li>Capture The Flag Coaching</li>
+                        <li>Security Bootcamps</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="skills">
+        <div class="section-container">
+            <div class="section-header reveal">
+                <span class="section-label">$ ls skills/</span>
+                <h2 class="section-title">Technical Arsenal</h2>
+                <p class="section-desc">Tools, technologies, and frameworks I use to build and break things.</p>
+            </div>
+            <div class="skills-wrapper">
+                <div class="skill-category reveal">
+                    <div class="skill-category-header">
+                        <div class="skill-category-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                        </div>
+                        <div>
+                            <h3>Offensive Security</h3>
+                            <p>Penetration testing & exploitation</p>
+                        </div>
+                    </div>
+                    <div class="skill-item-row">
+                        <div class="skill-item-header"><span class="skill-item-name">Web Application Testing</span><span class="skill-item-percent">95%</span></div>
+                        <div class="skill-bar"><div class="skill-bar-fill" data-width="95"></div></div>
+                    </div>
+                    <div class="skill-item-row">
+                        <div class="skill-item-header"><span class="skill-item-name">Network Penetration</span><span class="skill-item-percent">90%</span></div>
+                        <div class="skill-bar"><div class="skill-bar-fill" data-width="90"></div></div>
+                    </div>
+                    <div class="skill-item-row">
+                        <div class="skill-item-header"><span class="skill-item-name">Reverse Engineering</span><span class="skill-item-percent">75%</span></div>
+                        <div class="skill-bar"><div class="skill-bar-fill" data-width="75"></div></div>
+                    </div>
+                    <div class="skill-item-row">
+                        <div class="skill-item-header"><span class="skill-item-name">Social Engineering</span><span class="skill-item-percent">85%</span></div>
+                        <div class="skill-bar"><div class="skill-bar-fill" data-width="85"></div></div>
+                    </div>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Burp Suite</span>
+                        <span class="skill-tag">Metasploit</span>
+                        <span class="skill-tag">Nmap</span>
+                        <span class="skill-tag">OWASP ZAP</span>
+                        <span class="skill-tag">SQLMap</span>
+                        <span class="skill-tag">Wireshark</span>
+                    </div>
+                </div>
+                <div class="skill-category reveal reveal-delay-1">
+                    <div class="skill-category-header">
+                        <div class="skill-category-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                        </div>
+                        <div>
+                            <h3>Development</h3>
+                            <p>Full-stack & secure coding</p>
+                        </div>
+                    </div>
+                    <div class="skill-item-row">
+                        <div class="skill-item-header"><span class="skill-item-name">JavaScript / TypeScript</span><span class="skill-item-percent">92%</span></div>
+                        <div class="skill-bar"><div class="skill-bar-fill" data-width="92"></div></div>
+                    </div>
+                    <div class="skill-item-row">
+                        <div class="skill-item-header"><span class="skill-item-name">Python</span><span class="skill-item-percent">90%</span></div>
+                        <div class="skill-bar"><div class="skill-bar-fill" data-width="90"></div></div>
+                    </div>
+                    <div class="skill-item-row">
+                        <div class="skill-item-header"><span class="skill-item-name">PHP / Laravel</span><span class="skill-item-percent">88%</span></div>
+                        <div class="skill-bar"><div class="skill-bar-fill" data-width="88"></div></div>
+                    </div>
+                    <div class="skill-item-row">
+                        <div class="skill-item-header"><span class="skill-item-name">C / C++</span><span class="skill-item-percent">70%</span></div>
+                        <div class="skill-bar"><div class="skill-bar-fill" data-width="70"></div></div>
+                    </div>
+                    <div class="skill-tags">
+                        <span class="skill-tag">React</span>
+                        <span class="skill-tag">Node.js</span>
+                        <span class="skill-tag">Django</span>
+                        <span class="skill-tag">Docker</span>
+                        <span class="skill-tag">Git</span>
+                        <span class="skill-tag">Linux</span>
+                    </div>
+                </div>
+                <div class="skill-category reveal reveal-delay-2">
+                    <div class="skill-category-header">
+                        <div class="skill-category-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                        </div>
+                        <div>
+                            <h3>Cloud & Infrastructure</h3>
+                            <p>Secure deployment & architecture</p>
+                        </div>
+                    </div>
+                    <div class="skill-item-row">
+                        <div class="skill-item-header"><span class="skill-item-name">AWS / Azure</span><span class="skill-item-percent">85%</span></div>
+                        <div class="skill-bar"><div class="skill-bar-fill" data-width="85"></div></div>
+                    </div>
+                    <div class="skill-item-row">
+                        <div class="skill-item-header"><span class="skill-item-name">Docker & Kubernetes</span><span class="skill-item-percent">80%</span></div>
+                        <div class="skill-bar"><div class="skill-bar-fill" data-width="80"></div></div>
+                    </div>
+                    <div class="skill-item-row">
+                        <div class="skill-item-header"><span class="skill-item-name">CI/CD Pipelines</span><span class="skill-item-percent">88%</span></div>
+                        <div class="skill-bar"><div class="skill-bar-fill" data-width="88"></div></div>
+                    </div>
+                    <div class="skill-item-row">
+                        <div class="skill-item-header"><span class="skill-item-name">Terraform / IaC</span><span class="skill-item-percent">72%</span></div>
+                        <div class="skill-bar"><div class="skill-bar-fill" data-width="72"></div></div>
+                    </div>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Jenkins</span>
+                        <span class="skill-tag">GitHub Actions</span>
+                        <span class="skill-tag">Ansible</span>
+                        <span class="skill-tag">Nginx</span>
+                        <span class="skill-tag">PostgreSQL</span>
+                        <span class="skill-tag">MongoDB</span>
+                    </div>
+                </div>
+                <div class="skill-category reveal reveal-delay-3">
+                    <div class="skill-category-header">
+                        <div class="skill-category-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        </div>
+                        <div>
+                            <h3>Soft Skills</h3>
+                            <p>Leadership & communication</p>
+                        </div>
+                    </div>
+                    <div class="skill-item-row">
+                        <div class="skill-item-header"><span class="skill-item-name">Technical Writing</span><span class="skill-item-percent">90%</span></div>
+                        <div class="skill-bar"><div class="skill-bar-fill" data-width="90"></div></div>
+                    </div>
+                    <div class="skill-item-row">
+                        <div class="skill-item-header"><span class="skill-item-name">Team Leadership</span><span class="skill-item-percent">85%</span></div>
+                        <div class="skill-bar"><div class="skill-bar-fill" data-width="85"></div></div>
+                    </div>
+                    <div class="skill-item-row">
+                        <div class="skill-item-header"><span class="skill-item-name">Client Communication</span><span class="skill-item-percent">92%</span></div>
+                        <div class="skill-bar"><div class="skill-bar-fill" data-width="92"></div></div>
+                    </div>
+                    <div class="skill-item-row">
+                        <div class="skill-item-header"><span class="skill-item-name">Problem Solving</span><span class="skill-item-percent">95%</span></div>
+                        <div class="skill-bar"><div class="skill-bar-fill" data-width="95"></div></div>
+                    </div>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Agile</span>
+                        <span class="skill-tag">Scrum</span>
+                        <span class="skill-tag">Mentoring</span>
+                        <span class="skill-tag">Public Speaking</span>
+                        <span class="skill-tag">Research</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="security-tools" style="background: var(--bg-secondary);">
+        <div class="section-container">
+            <div class="section-header reveal">
+                <span class="section-label">$ ls security-tools/</span>
+                <h2 class="section-title">Security Tools</h2>
+                <p class="section-desc">Learn about practical cybersecurity tools, their core concepts, and safe lab usage.</p>
+            </div>
+            <div class="projects-grid">
+                <div class="project-card reveal">
+                    <div class="project-image"><div class="project-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="7"></circle><line x1="16.5" y1="16.5" x2="22" y2="22"></line>
+                        </svg>
+                    </div></div>
+                    <div class="project-content">
+                        <div class="project-tags"><span class="project-tag">Recon</span><span class="project-tag">Network</span></div>
+                        <h3>Nmap</h3>
+                        <p>Explore network discovery, scanning concepts, and how to read Nmap results.</p>
+                        <div class="project-links">
+                            <a href="nmap.html" class="btn btn-primary btn-sm">Learn Nmap</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card reveal reveal-delay-1">
+                    <div class="project-image"><div class="project-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 4h16v16H4z"></path><path d="M8 8h8M8 12h6M8 16h4"></path>
+                        </svg>
+                    </div></div>
+                    <div class="project-content">
+                        <div class="project-tags"><span class="project-tag">Web Security</span><span class="project-tag">Proxy</span></div>
+                        <h3>Burp Suite</h3>
+                        <p>Understand web testing workflows, HTTP requests, and the main Burp Suite components.</p>
+                        <div class="project-links">
+                            <a href="burpsuite.html" class="btn btn-primary btn-sm">Learn Burp Suite</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card reveal reveal-delay-2">
+                    <div class="project-image"><div class="project-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2l9 5-9 5-9-5 9-5z"></path><path d="M3 12l9 5 9-5"></path><path d="M3 17l9 5 9-5"></path>
+                        </svg>
+                    </div></div>
+                    <div class="project-content">
+                        <div class="project-tags"><span class="project-tag">Framework</span><span class="project-tag">Pentesting</span></div>
+                        <h3>Metasploit</h3>
+                        <p>Learn the Metasploit framework, its concepts, responsible use, and safe lab examples.</p>
+                        <div class="project-links">
+                            <a href="metasploit.html" class="btn btn-primary btn-sm">Learn Metasploit</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card reveal">
+                    <div class="project-image"><div class="project-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 4h18v16H3z"></path><path d="M6 8h12M6 12h8M6 16h10"></path>
+                        </svg>
+                    </div></div>
+                    <div class="project-content">
+                        <div class="project-tags"><span class="project-tag">Web Scanner</span><span class="project-tag">Assessment</span></div>
+                        <h3>Nikto</h3>
+                        <p>Explore web server assessment concepts and the types of issues Nikto can identify.</p>
+                        <div class="project-links">
+                            <a href="nikto.html" class="btn btn-primary btn-sm">Learn Nikto</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card reveal reveal-delay-1">
+                    <div class="project-image"><div class="project-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 5h16v14H4z"></path><path d="M7 9h10M7 13h7M7 17h4"></path>
+                        </svg>
+                    </div></div>
+                    <div class="project-content">
+                        <div class="project-tags"><span class="project-tag">Password Audit</span><span class="project-tag">Hashing</span></div>
+                        <h3>John the Ripper</h3>
+                        <p>Learn password-auditing concepts, hashing fundamentals, and safe lab examples.</p>
+                        <div class="project-links">
+                            <a href="john.html" class="btn btn-primary btn-sm">Learn John</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card reveal reveal-delay-2">
+                    <div class="project-image"><div class="project-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 3h18v18H3z"></path><path d="M6 7h12M6 11h12M6 15h7"></path>
+                        </svg>
+                    </div></div>
+                    <div class="project-content">
+                        <div class="project-tags"><span class="project-tag">Packet Analysis</span><span class="project-tag">Network</span></div>
+                        <h3>Wireshark</h3>
+                        <p>Understand packets, traffic analysis, display filters, and common Wireshark workflows.</p>
+                        <div class="project-links">
+                            <a href="wireshark.html" class="btn btn-primary btn-sm">Learn Wireshark</a>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" style="background: var(--bg-secondary);">
+        <div class="section-container">
+            <div class="section-header reveal">
+                <span class="section-label">$ ls projects/</span>
+                <h2 class="section-title">Featured Projects</h2>
+                <p class="section-desc">A selection of my recent work in security and development.</p>
+            </div>
+            <div class="projects-filter reveal">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="security">Security</button>
+                <button class="filter-btn" data-filter="web">Web Dev</button>
+                <button class="filter-btn" data-filter="tools">Tools</button>
+            </div>
+            <div class="projects-grid" id="projects-grid">
+                <div class="project-card reveal" data-category="security">
+                    <div class="project-image">
+                        <div class="project-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <div class="project-tags"><span class="project-tag">Python</span><span class="project-tag">Security</span></div>
+                        <h3>VulnScan Pro</h3>
+                        <p>Automated vulnerability scanner with intelligent reporting and CVSS scoring for comprehensive security assessments.</p>
+                        <div class="project-links">
+                            <a href="#" class="project-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg> GitHub</a>
+                            <a href="#" class="project-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Live Demo</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card reveal reveal-delay-1" data-category="web">
+                    <div class="project-image">
+                        <div class="project-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <div class="project-tags"><span class="project-tag">React</span><span class="project-tag">Node.js</span></div>
+                        <h3>SecureAuth Platform</h3>
+                        <p>Enterprise-grade authentication system with MFA, biometric integration, and zero-trust architecture principles.</p>
+                        <div class="project-links">
+                            <a href="#" class="project-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg> GitHub</a>
+                            <a href="#" class="project-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Live Demo</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card reveal reveal-delay-2" data-category="tools">
+                    <div class="project-image">
+                        <div class="project-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <div class="project-tags"><span class="project-tag">Go</span><span class="project-tag">CLI</span></div>
+                        <h3>SubEnum Toolkit</h3>
+                        <p>High-performance subdomain enumeration tool with passive and active discovery methods, written in Go.</p>
+                        <div class="project-links">
+                            <a href="#" class="project-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg> GitHub</a>
+                            <a href="#" class="project-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Live Demo</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card reveal" data-category="security">
+                    <div class="project-image">
+                        <div class="project-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <div class="project-tags"><span class="project-tag">Python</span><span class="project-tag">ML</span></div>
+                        <h3>ThreatIntel AI</h3>
+                        <p>Machine learning-powered threat intelligence platform that predicts and identifies emerging cyber threats.</p>
+                        <div class="project-links">
+                            <a href="#" class="project-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg> GitHub</a>
+                            <a href="#" class="project-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Live Demo</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card reveal reveal-delay-1" data-category="web">
+                    <div class="project-image">
+                        <div class="project-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <div class="project-tags"><span class="project-tag">Next.js</span><span class="project-tag">Web3</span></div>
+                        <h3>CryptoGuard Dashboard</h3>
+                        <p>Real-time cryptocurrency security monitoring dashboard with smart contract vulnerability tracking.</p>
+                        <div class="project-links">
+                            <a href="#" class="project-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg> GitHub</a>
+                            <a href="#" class="project-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Live Demo</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card reveal reveal-delay-2" data-category="tools">
+                    <div class="project-image">
+                        <div class="project-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <div class="project-tags"><span class="project-tag">Rust</span><span class="project-tag">Security</span></div>
+                        <h3>PacketSentry</h3>
+                        <p>High-performance network packet analyzer with real-time intrusion detection capabilities.</p>
+                        <div class="project-links">
+                            <a href="#" class="project-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg> GitHub</a>
+                            <a href="#" class="project-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Live Demo</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="certifications" style="background: var(--bg-secondary);">
+        <div class="section-container">
+            <div class="section-header reveal">
+                <span class="section-label">$ ls certs/</span>
+                <h2 class="section-title">Certifications</h2>
+                <p class="section-desc">Industry-recognized credentials validating my expertise.</p>
+            </div>
+            <div class="certs-grid">
+                <div class="cert-card reveal">
+                    <div class="cert-badge">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    </div>
+                    <h3>OSCP</h3>
+                    <p>Offensive Security Certified Professional</p>
+                </div>
+                <div class="cert-card reveal reveal-delay-1">
+                    <div class="cert-badge">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    </div>
+                    <h3>CEH</h3>
+                    <p>Certified Ethical Hacker</p>
+                </div>
+                <div class="cert-card reveal reveal-delay-2">
+                    <div class="cert-badge">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                    </div>
+                    <h3>eJPT</h3>
+                    <p>eLearnSecurity Junior Penetration Tester</p>
+                </div>
+                <div class="cert-card reveal reveal-delay-3">
+                    <div class="cert-badge">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+                    </div>
+                    <h3>CompTIA Security+</h3>
+                    <p>Core cybersecurity fundamentals</p>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="contact" style="background: var(--bg-secondary);">
+        <div class="section-container">
+            <div class="section-header reveal">
+                <span class="section-label">$ ./contact.sh</span>
+                <h2 class="section-title">Get In Touch</h2>
+                <p class="section-desc">Have a project in mind or need a security assessment? Let's talk.</p>
+            </div>
+            <div class="contact-wrapper">
+                <div class="contact-info-panel reveal">
+                    <h3>Let's Build Something Secure</h3>
+                    <p>Open to internships, security collaborations, freelance work, and interesting projects. Drop a message.</p>
+
+                    <div class="contact-methods">
+                        <a href="mailto:starlinghacker@gmail.com" class="contact-method">
+                            <div class="contact-method-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
+                            </div>
+                            <div class="contact-method-info">
+                                <h4>Email</h4>
+                                <p class="contact-method-value">starlinghacker@gmail.com</p>
+                            </div>
+                        </a>
+
+                        <a href="#" class="contact-method">
+                            <div class="contact-method-icon">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.792 0 22.225 0z"></path>
+                                </svg>
+                            </div>
+                            <div class="contact-method-info">
+                                <h4>LinkedIn</h4>
+                                <p class="contact-method-value">Starling Thapa</p>
+                            </div>
+                        </a>
+
+                        <a href="https://github.com/starboy220" class="contact-method" target="_blank" rel="noopener noreferrer">
+                            <div class="contact-method-icon">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"></path>
+                                </svg>
+                            </div>
+                            <div class="contact-method-info">
+                                <h4>GitHub</h4>
+                                <p class="contact-method-value">starboy220</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="contact-terminal reveal reveal-delay-1">
+                    <div class="terminal-header">
+                        <div class="terminal-dot red"></div>
+                        <div class="terminal-dot yellow"></div>
+                        <div class="terminal-dot green"></div>
+                    </div>
+                    <div class="terminal-body">
+                        <div class="contact-terminal-line">
+                            <span class="terminal-prompt">starling@kali</span><span class="terminal-value">:~$ </span><span class="terminal-command">cat status.txt</span>
+                        </div>
+                        <div class="contact-terminal-line terminal-output">
+                            <span class="terminal-success">✓</span> Open to internships & opportunities<br>
+                            <span class="terminal-success">✓</span> Open to security collaborations<br>
+                            <span class="terminal-success">✓</span> Based in Kathmandu, Nepal<br>
+                            <span class="terminal-success">✓</span> Response time: &lt; 24h
+                        </div>
+                        <div class="contact-terminal-line">
+                            <span class="terminal-prompt">starling@kali</span><span class="terminal-value">:~$ </span><span class="terminal-command">echo $STATUS</span>
+                        </div>
+                        <div class="contact-terminal-line terminal-output">
+                            <span class="terminal-metric">ACTIVE</span> — ready for the next project.
+                        </div>
+                    </div>
+                </div>
+            </div>            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="section-container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#home" class="logo">ST</a>
+                    <p>Ethical Hacker & Software Designer based in Nepal. Securing the digital world one vulnerability at a time.</p>
+                    <div class="social-grid">
+                        <a href="https://github.com/starboy220" class="social-btn" aria-label="GitHub">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                        </a>
+                        <a href="#" class="social-btn" aria-label="LinkedIn">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                        </a>
+                        <a href="https://x.com/callmestarling1" class="social-btn" aria-label="Twitter">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <ul class="footer-links">
+                        <li><a href="mailto:starlinghacker@gmail.com">starlinghacker@gmail.com</a></li>
+                        <li><a href="https://wa.me/9779702192255">Chat</a></li>
+                        <li><a href="#">Kathmandu, Nepal</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-copyright">
+                    <span style="color: var(--accent);">$</span> echo "&copy; 2024 Starling Thapa. All rights reserved."
+                </div>
+                <button class="scroll-top" id="scroll-top" aria-label="Scroll to top">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <div class="toast-container" id="toast-container"></div>
+    <script>
+        // Loading Screen
+        const loadingScreen = document.getElementById('loading-screen');
+        const loadingPercent = document.getElementById('loading-percent');
+        let progress = 0;
+        const progressInterval = setInterval(() => {
+            progress += 25;
+            if (progress >= 100) {
+                progress = 100;
+                clearInterval(progressInterval);
+                loadingScreen.classList.add('fade-out');
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 500);
+            }
+            loadingPercent.textContent = progress + '%';
+        }, 100);
+
+        // Typewriter Effect
+        const typewriterElement = document.getElementById('typewriter');
+        const roles = [
+            'Ethical Hacker',
+            'Penetration Tester',
+            'Security Consultant',
+            'Full-Stack Developer',
+            'Bug Bounty Hunter',
+            'Red Team Operator'
+        ];
+        let roleIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        let typeSpeed = 100;
+
+        function typeWriter() {
+            const currentRole = roles[roleIndex];
+            if (isDeleting) {
+                typewriterElement.textContent = currentRole.substring(0, charIndex - 1);
+                charIndex--;
+                typeSpeed = 50;
+            } else {
+                typewriterElement.textContent = currentRole.substring(0, charIndex + 1);
+                charIndex++;
+                typeSpeed = 100;
+            }
+
+            if (!isDeleting && charIndex === currentRole.length) {
+                isDeleting = true;
+                typeSpeed = 2000;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                roleIndex = (roleIndex + 1) % roles.length;
+                typeSpeed = 500;
+            }
+
+            setTimeout(typeWriter, typeSpeed);
+        }
+        setTimeout(typeWriter, 1000);
+
+        // Navigation Scroll Effect
+        const nav = document.getElementById('nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile Menu
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+        });
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('active');
+            });
+        });
+
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Scroll Reveal Animation
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            revealObserver.observe(el);
+        });
+
+        // Counter Animation
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const counters = entry.target.querySelectorAll('.stat-number');
+                    counters.forEach(counter => {
+                        const target = parseInt(counter.getAttribute('data-count'));
+                        const duration = 2000;
+                        const increment = target / (duration / 16);
+                        let current = 0;
+                        const updateCounter = () => {
+                            current += increment;
+                            if (current < target) {
+                                counter.textContent = Math.floor(current) + '+';
+                                requestAnimationFrame(updateCounter);
+                            } else {
+                                counter.textContent = target + '+';
+                            }
+                        };
+                        updateCounter();
+                    });
+                    counterObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        const statsBar = document.querySelector('.stats-bar');
+        if (statsBar) counterObserver.observe(statsBar);
+
+        // Skill Bar Animation
+        const skillObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const bars = entry.target.querySelectorAll('.skill-bar-fill');
+                    bars.forEach(bar => {
+                        const width = bar.getAttribute('data-width');
+                        bar.style.width = width + '%';
+                    });
+                    skillObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 });
+
+        document.querySelectorAll('.skills-wrapper').forEach(wrapper => {
+            skillObserver.observe(wrapper);
+        });
+
+        // Project Filter
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const projectCards = document.querySelectorAll('.project-card');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const filter = btn.getAttribute('data-filter');
+                projectCards.forEach(card => {
+                    if (filter === 'all' || card.getAttribute('data-category') === filter) {
+                        card.style.display = 'block';
+                        setTimeout(() => {
+                            card.style.opacity = '1';
+                            card.style.transform = 'translateY(0)';
+                        }, 50);
+                    } else {
+                        card.style.opacity = '0';
+                        card.style.transform = 'translateY(20px)';
+                        setTimeout(() => {
+                            card.style.display = 'none';
+                        }, 300);
+                    }
+                });
+            });
+        });
+
+        // Contact Form
+        const contactForm = document.getElementById('contact-form');
+        const toastContainer = document.getElementById('toast-container');
+
+        function showToast(title, description) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `<div class="toast-title">${title}</div><div class="toast-desc">${description}</div>`;
+            toastContainer.appendChild(toast);
+            setTimeout(() => {
+                toast.style.animation = 'toastSlide 0.3s ease reverse forwards';
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+
+        if (contactForm) {
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                showToast('Message Sent!', 'Thank you for reaching out. I will get back to you within 24 hours.');
+                this.reset();
+            });
+        }
+
+        // Scroll to Top
+        document.getElementById('scroll-top').addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Active Nav Link on Scroll
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                if (window.scrollY >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
