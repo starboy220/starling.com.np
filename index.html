@@ -68,6 +68,12 @@
         .logo { font-family: var(--font-mono); font-size: 1.25rem; font-weight: 700; color: var(--accent); text-decoration: none; display: flex; align-items: center; gap: 0.5rem; }
         .logo::before { content: '<'; color: var(--text-muted); }
         .logo::after { content: '/>'; color: var(--text-muted); }
+
+        /* Top-left logo image */
+        .nav-logo::before, .nav-logo::after { display: none; }
+        .nav-logo { height: 48px; width: 48px; gap: 0; }
+        .nav-logo img { width: 450px; height: 42px; object-fit: contain; display: block; }
+        .nav-logo:hover img { filter: drop-shadow(0 0 8px var(--accent)); }
         .nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
         .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: var(--transition); position: relative; padding: 0.5rem 0; }
         .nav-links a:hover { color: var(--accent); }
@@ -107,6 +113,8 @@
         .hero-image-frame:hover .hero-image-bg { transform: rotate(-3deg) scale(1.02); }
         .scan-container { position: relative; width: 100%; height: 100%; border: 2px solid var(--accent); border-radius: 20px; overflow: hidden; background: var(--bg-card); box-shadow: 0 0 40px var(--accent-glow); }
         .profile-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .hero-logo-img { object-fit: contain; padding: 1.25rem; background: #080a0b; }
+        .logo-container { display: flex; align-items: center; justify-content: center; }
         .scan-line { position: absolute; left: 0; width: 100%; height: 3px; background: var(--accent); box-shadow: 0 0 20px var(--accent), 0 0 40px var(--accent); animation: scanMove 2.5s ease-in-out infinite; }
         @keyframes scanMove { 0%,100% { top: 0%; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 50% { top: 100%; } }
         .scan-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 50%, rgba(34,197,94,0.05) 50%); background-size: 100% 4px; pointer-events: none; }
@@ -422,7 +430,7 @@
 
     <nav id="nav">
         <div class="nav-content">
-            <a href="#home" class="logo">ST</a>
+            <a href="#home" class="logo nav-logo"><img src="logo.png" alt="Starling Thapa Logo"></a>
             <ul class="nav-links">
                 <li><a href="#home">Home</a></li>
                 <li><a href="#about">About</a></li>
@@ -482,9 +490,8 @@
                 <div class="hero-image-wrapper reveal reveal-delay-2">
                     <div class="hero-image-frame">
                         <div class="hero-image-bg"></div>
-                        <div class="scan-container">
-                            <img src="starling.png" class="profile-img" alt="Starling Thapa">
-                            <div class="scan-line"></div>
+                        <div class="scan-container logo-container">
+                            <img src="starling.png" class="profile-img hero-logo-img" alt="Starling Thapa Logo">
                             <div class="scan-overlay"></div>
                         </div>
                     </div>
