@@ -1,0 +1,164 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><meta name="description" content="Learn Nmap for authorized cybersecurity and security auditing labs."><title>Learn Nmap | Starling Thapa</title><style>
+:root{
+ --bg-primary:#0a0e17;--bg-secondary:#0f1419;--bg-card:#111827;--bg-card-hover:#1a2332;
+ --border:#1f2937;--border-glow:#22c55e;--text-primary:#e5e7eb;--text-secondary:#9ca3af;
+ --text-muted:#6b7280;--accent:#22c55e;--accent-dim:#16a34a;
+ --accent-glow:rgba(34,197,94,.15);--accent-glow-strong:rgba(34,197,94,.3);
+ --danger:#ef4444;--warning:#f59e0b;--info:#3b82f6;--radius:12px;--radius-sm:8px;
+ --transition:all .3s cubic-bezier(.4,0,.2,1);--font-mono:'JetBrains Mono','Courier New',monospace;
+ --font-sans:'Inter',system-ui,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+ background-color:var(--bg-primary);color:var(--text-primary);font-family:var(--font-sans);
+ overflow-x:hidden;line-height:1.6;-webkit-font-smoothing:antialiased;
+ background-image:radial-gradient(circle at 20% 50%,rgba(34,197,94,.08) 0%,transparent 50%),radial-gradient(circle at 80% 20%,rgba(59,130,246,.05) 0%,transparent 40%);
+}
+body:before{
+ content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
+ background-image:linear-gradient(rgba(34,197,94,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(34,197,94,.025) 1px,transparent 1px);
+ background-size:60px 60px;mask-image:radial-gradient(ellipse at center,black 40%,transparent 85%);
+}
+::selection{background:var(--accent-glow-strong);color:var(--text-primary)}
+::-webkit-scrollbar{width:8px}::-webkit-scrollbar-track{background:var(--bg-primary)}
+::-webkit-scrollbar-thumb{background:var(--accent-dim);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:var(--accent)}
+a{color:inherit;text-decoration:none}
+.container{width:min(1120px,92%);margin:auto}
+
+/* Navigation — aligned with the main portfolio */
+.nav{
+ position:sticky;top:0;z-index:100;background:rgba(10,14,23,.88);
+ backdrop-filter:blur(14px);border-bottom:1px solid var(--border);
+}
+.nav-inner{min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.logo{
+ font-family:var(--font-mono);font-size:1.35rem;font-weight:800;color:var(--accent);
+ letter-spacing:-.04em;transition:var(--transition);text-shadow:0 0 20px var(--accent-glow);
+}
+.logo:hover{transform:translateY(-1px);text-shadow:0 0 28px var(--accent-glow-strong)}
+.nav-links{display:flex;align-items:center;gap:1.6rem;list-style:none;font-family:var(--font-mono);font-size:.78rem}
+.nav-links a{color:var(--text-secondary);transition:var(--transition);padding:.45rem 0}
+.nav-links a:hover{color:var(--accent)}
+.nav-links li:last-child a{border:1px solid var(--border);border-radius:var(--radius-sm);padding:.55rem 1rem;color:var(--text-primary)}
+.nav-links li:last-child a:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-glow)}
+
+/* Hero */
+.hero{padding:7rem 0 5rem;border-bottom:1px solid var(--border);position:relative}
+.kicker,.prompt,.num{color:var(--accent);font-family:var(--font-mono)}
+.kicker{font-size:.8rem;letter-spacing:.08em;margin-bottom:1.1rem}
+h1{
+ font-size:clamp(2.6rem,6vw,4.7rem);line-height:1.05;margin-bottom:1.4rem;
+ font-weight:800;letter-spacing:-.045em
+}
+h1 span{color:var(--accent)}
+.hero p{max-width:820px;color:var(--text-secondary);font-size:1.05rem}
+.actions{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:2rem}
+.btn{
+ display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.25rem;border-radius:var(--radius-sm);
+ font-weight:600;font-size:.9rem;font-family:var(--font-sans);cursor:pointer;
+ border:1px solid var(--border);color:var(--text-primary);background:transparent;transition:var(--transition)
+}
+.btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-glow);transform:translateY(-2px)}
+.primary{background:var(--accent);color:var(--bg-primary);border-color:var(--accent);font-weight:700}
+.primary:hover{background:var(--accent-dim);color:var(--bg-primary);box-shadow:0 10px 30px var(--accent-glow)}
+
+/* Sections and cards */
+section{padding:5rem 0}
+.section-head{margin-bottom:1.5rem}
+.num{font-size:.75rem;margin-bottom:.35rem;letter-spacing:.08em}
+h2{font-size:clamp(1.65rem,4vw,2.4rem);margin-bottom:.65rem;font-weight:800;letter-spacing:-.03em}
+.intro{color:var(--text-secondary);max-width:820px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.1rem}
+.card{
+ border:1px solid var(--border);background:var(--bg-card);border-radius:var(--radius);
+ padding:1.6rem;box-shadow:0 12px 35px rgba(0,0,0,.18);transition:var(--transition)
+}
+.card:hover{background:var(--bg-card-hover);border-color:rgba(34,197,94,.45);transform:translateY(-2px);box-shadow:0 15px 40px rgba(0,0,0,.25),0 0 25px var(--accent-glow)}
+.card h3{font-size:1.05rem;margin-bottom:.6rem;font-weight:700}
+.card p{color:var(--text-secondary);font-size:.94rem}
+.card a{color:var(--accent)}
+.card a:hover{text-decoration:underline}
+
+/* Terminal */
+.terminal{
+ border:1px solid var(--border);border-radius:var(--radius);background:#080c12;
+ box-shadow:0 0 30px rgba(0,0,0,.35);margin:1.6rem 0;overflow:hidden
+}
+.terminal-top{
+ padding:.65rem .9rem;border-bottom:1px solid var(--border);color:var(--text-muted);
+ font:500 .72rem var(--font-mono);background:var(--bg-secondary)
+}
+.terminal-body{
+ padding:1.2rem;color:#cbd5e1;overflow-x:auto;font:400 .88rem/1.75 var(--font-mono)
+}
+.terminal-body code{color:var(--accent)}
+
+/* Roadmap / steps */
+.roadmap{display:grid;gap:.8rem}
+.step{
+ display:grid;grid-template-columns:58px 1fr;gap:1rem;border:1px solid var(--border);
+ border-radius:var(--radius-sm);padding:1.1rem 1.2rem;background:rgba(17,24,39,.72);transition:var(--transition)
+}
+.step:hover{border-color:rgba(34,197,94,.4);background:var(--bg-card-hover)}
+.step-num{color:var(--accent);font:700 1.25rem var(--font-mono)}
+.step h3{margin-bottom:.25rem}
+.step p{color:var(--text-secondary);font-size:.9rem}
+.note{
+ border-left:3px solid var(--accent);border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+ padding:1rem 1.2rem;background:var(--accent-glow);color:var(--text-secondary);margin-top:1.25rem
+}
+.danger{border-left-color:var(--warning);background:rgba(245,158,11,.06)}
+.footer{
+ border-top:1px solid var(--border);padding:2.5rem 0;color:var(--text-muted);
+ font:400 .78rem/1.7 var(--font-mono);background:rgba(10,14,23,.55)
+}
+.footer a{color:var(--accent)}
+@media(max-width:700px){
+ .nav-inner{min-height:68px}.nav-links{gap:.7rem;font-size:.68rem}
+ .nav-links li:nth-child(-n+6){display:none}
+ .nav-links li:last-child a{padding:.5rem .8rem}
+ .hero{padding:4.5rem 0 3.5rem}
+ section{padding:3.5rem 0}.grid{grid-template-columns:1fr}
+ .step{grid-template-columns:45px 1fr;padding:1rem}
+ h1{font-size:2.7rem}.hero p{font-size:.98rem}
+}
+</style><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"></head><body>
+<nav class="nav"><div class="container nav-inner"><a class="logo" href="index.html">ST<span class="prompt">_</span></a><ul class="nav-links"><li><a href="#s0">01</a></li><li><a href="#s1">02</a></li><li><a href="#s2">03</a></li><li><a href="#s3">04</a></li><li><a href="#s4">05</a></li><li><a href="#s5">06</a></li><li><a href="index.html">← Home</a></li></ul></div></nav><main><header class="hero"><div class="container"><div class="kicker">$ cat network_scanning.txt</div><h1>Learn <span>Nmap</span>.</h1><p>Nmap is a network discovery and security auditing tool used to identify hosts, open ports, services, and other characteristics of systems you are authorized to assess.</p><div class="actions"><a class="btn primary" href="#roadmap">Start Learning</a><a class="btn" href="index.html">← Back to Portfolio</a></div></div></header><section id="s0"><div class="container"><div class="section-head"><div class="num">01 / what_is_nmap.txt</div><h2>What is Nmap?</h2></div><div class="card"><p>Nmap ("Network Mapper") is a free, open-source utility originally released in 1997 by Gordon Lyon. It helps security professionals and administrators understand what systems are reachable and which network services they expose. It is commonly used for inventory, troubleshooting, security auditing, and controlled penetration-testing labs.</p><p style="margin-top:14px">Because Nmap simply sends and interprets standard network traffic, it is considered a "dual-use" tool: the exact same scan that helps a system administrator confirm a firewall rule is working can also be used by an attacker to look for a way in. This is why every guide on this page repeats the same rule — only point Nmap at systems you own or are explicitly authorized to test.</p><p style="margin-top:14px">Nmap ships with a companion scripting engine (NSE), a version-detection database, and a GUI front-end called Zenmap. Most learners start with the command-line tool because the flags map directly onto networking concepts you already know from TCP/IP fundamentals.</p></div></div></section><section id="s1"><div class="container"><div class="section-head"><div class="num">02 / how_it_works.txt</div><h2>How Nmap Works</h2></div><div class="card"><p>A scanner sends carefully constructed network probes and observes responses. From those responses, Nmap can determine whether a host is reachable, whether ports appear open or closed, and sometimes which service or operating system is associated with the target.</p><p style="margin-top:14px">At a conceptual level, Nmap's workflow has four stages: <strong>host discovery</strong> (is anything answering at this address?), <strong>port scanning</strong> (which of the 65,535 TCP/UDP ports respond?), <strong>service/version detection</strong> (what software is listening, and which version?), and optionally <strong>OS fingerprinting</strong> (what does the pattern of responses suggest about the operating system?). Each stage builds on the last, which is why a full scan takes longer than a quick ping sweep.</p><p style="margin-top:14px">Different scan types simply change how the initial probe is built. A TCP connect scan completes a full handshake through the operating system's own networking stack, which is reliable but easy to log. Understanding the handshake itself is the real learning goal — the scan type is just a different way of asking the same three questions: is it open, closed, or filtered?</p></div>
+<div class="terminal" style="margin-top:20px"><div class="terminal-top">diagram · tcp_handshake.svg</div><div class="terminal-body" style="padding:24px 20px">
+<svg viewBox="0 0 700 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;overflow:visible;font-family:Consolas,Monaco,'Courier New',monospace">
+<text x="60" y="20" fill="#8eaa98" font-size="13">Scanner</text>
+<text x="580" y="20" fill="#8eaa98" font-size="13">Target Port</text>
+<line x1="70" y1="30" x2="70" y2="200" stroke="rgba(57,255,136,.35)" stroke-width="1.5"/>
+<line x1="620" y1="30" x2="620" y2="200" stroke="rgba(57,255,136,.35)" stroke-width="1.5"/>
+<line x1="80" y1="55" x2="610" y2="55" stroke="#39ff88" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="300" y="47" fill="#39ff88" font-size="12">SYN →</text>
+<line x1="610" y1="95" x2="80" y2="95" stroke="#39ff88" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="270" y="87" fill="#39ff88" font-size="12">← SYN/ACK  (port is open)</text>
+<line x1="80" y1="135" x2="610" y2="135" stroke="#39ff88" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="300" y="127" fill="#39ff88" font-size="12">ACK →</text>
+<line x1="610" y1="175" x2="80" y2="175" stroke="#d9c75b" stroke-width="1.5" stroke-dasharray="5,4"/>
+<text x="230" y="167" fill="#d9c75b" font-size="12">(closed port replies RST instead of SYN/ACK)</text>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#39ff88"/></marker></defs>
+</svg>
+<p style="color:#8eaa98;font-size:.8rem;margin-top:10px">Simplified view of the TCP three-way handshake Nmap's connect-style scanning relies on. This is the same handshake every normal TCP connection uses — Nmap just automates asking the question at scale.</p>
+</div></div></div></section><section id="s2"><div class="container"><div class="section-head"><div class="num">03 / common_uses.txt</div><h2>Common Uses</h2></div><div class="card"><p>Host discovery; TCP/UDP port discovery; service and version identification; basic OS detection; network inventory; troubleshooting unexpected exposure; change-detection between two scans of the same authorized network; and validating that a firewall rule actually blocks what it's supposed to.</p></div><div class="grid" style="margin-top:18px"><div class="card"><p><span class="prompt">[+]</span> Host discovery — is anything alive at this address?</p></div><div class="card"><p><span class="prompt">[+]</span> TCP/UDP port discovery — which doors are unlocked?</p></div><div class="card"><p><span class="prompt">[+]</span> Service and version identification — what's running behind the door?</p></div><div class="card"><p><span class="prompt">[+]</span> Basic OS detection — what does the network stack behavior suggest?</p></div><div class="card"><p><span class="prompt">[+]</span> Network inventory — keeping an accurate map of your own assets</p></div><div class="card"><p><span class="prompt">[+]</span> Troubleshooting unexpected exposure or misconfigured services</p></div><div class="card"><p><span class="prompt">[+]</span> Change detection — comparing scans over time to catch drift</p></div><div class="card"><p><span class="prompt">[+]</span> Firewall and segmentation validation in an authorized environment</p></div></div></div></section><section id="s3"><div class="container"><div class="section-head"><div class="num">04 / reading_output.txt</div><h2>Reading Nmap Output</h2></div><div class="card"><p>A typical result can show a port number, protocol, state, and service. An <strong>open</strong> port generally means an application is accepting connections. A <strong>closed</strong> port responds but is not accepting an application connection. <strong>Filtered</strong> means a firewall or other network control prevents Nmap from determining the state with confidence. You may also see <strong>open|filtered</strong> or <strong>closed|filtered</strong>, which mean Nmap received no response at all and cannot distinguish between the two possibilities — this is common with UDP scanning, where silence is ambiguous.</p></div><div class="terminal"><div class="terminal-top">example_output.txt</div><div class="terminal-body"><code>PORT     STATE    SERVICE      VERSION</code><br>22/tcp   open     ssh          OpenSSH<br>80/tcp   open     http         nginx<br>123/udp  open|filtered ntp<br>445/tcp  filtered microsoft-ds<br>3306/tcp closed   mysql<br><br><span class="prompt">&gt;</span> Read results as evidence to investigate, not as automatic proof of compromise.<br><span class="prompt">&gt;</span> A version string is a clue, not a confirmed vulnerability — always cross-check against a trusted advisory before drawing conclusions.</div></div></div></section><section id="s4"><div class="container"><div class="section-head"><div class="num">05 / safe_examples.txt</div><h2>Safe Lab Examples</h2></div><div class="card"><p>Practice only against your own computer, a deliberately vulnerable lab, or another system where you have explicit permission. For example, scanning your own machine with <code>nmap localhost</code> is a simple way to see locally exposed TCP services. You can compare the result with the services you intentionally started.</p><p style="margin-top:14px">A few more beginner-friendly, self-directed examples to try only against your own machine or lab VM: <code>nmap -sV localhost</code> to add version detection to the results you already saw, <code>nmap -p 1-1000 127.0.0.1</code> to limit the scan to the first thousand ports, and <code>nmap --top-ports 20 localhost</code> to check only the twenty most commonly used ports. Comparing the output of each command helps you understand what each flag actually changes.</p></div><div class="terminal"><div class="terminal-top">student@starling:~$ security-lab --authorized</div><div class="terminal-body"><code>[SAFE LAB]</code> Use only a system you own or have explicit permission to test.<br>&gt; Build an isolated practice environment.<br>&gt; Observe the tool's output.<br>&gt; Document findings.<br>&gt; Fix the issue.<br>&gt; Test again.</div></div></div></section><section id="s5"><div class="container"><div class="section-head"><div class="num">06 / practical_lab.txt</div><h2>Practical Lab</h2></div><div class="card"><p>Create a small virtual-machine lab. Identify the lab machine's address, run a basic authorized scan, record discovered ports, identify the services responsible, and decide whether every exposed service is actually needed.</p></div>
+<div class="roadmap" style="margin-top:18px">
+<div class="step"><div class="step-num">1</div><p>Spin up two virtual machines on an isolated, host-only network — one acting as the "target," one as the "scanner." Confirm neither can reach the public internet or your production network.</p></div>
+<div class="step"><div class="step-num">2</div><p>On the target VM, note which services you intentionally started (for example, a local web server or SSH daemon) so you have a known answer key.</p></div>
+<div class="step"><div class="step-num">3</div><p>From the scanner VM, run a basic scan against the target's private IP address and record every open port and reported service.</p></div>
+<div class="step"><div class="step-num">4</div><p>Compare the scan results to your answer key. Investigate any surprises — an unexpected open port is exactly the kind of finding a real audit is looking for.</p></div>
+<div class="step"><div class="step-num">5</div><p>Disable one unnecessary service on the target, re-scan, and confirm the port disappears from the results. This closes the loop between finding and fixing.</p></div>
+</div></div></section><section id="s6"><div class="container"><div class="section-head"><div class="num">07 / defensive_view.txt</div><h2>Defensive Perspective</h2></div><div class="card"><p>Nmap results are valuable to defenders because they reveal attack surface. Unnecessary services should be disabled, exposed services should be patched, and network segmentation and firewall rules should limit access where appropriate.</p><p style="margin-top:14px">Many organizations run their own authorized scans on a schedule so they see their exposure before an outsider does. Pairing scan results with an asset inventory helps answer the most important defensive question: "does every open port map to a service we actually intend to expose, to the people who actually need it?" Logging and alerting on scan-like traffic patterns can also help defenders notice reconnaissance activity against systems they monitor.</p></div></div></section>
+<section id="s7"><div class="container"><div class="section-head"><div class="num">08 / ethics_and_law.txt</div><h2>Ethics &amp; Legal Considerations</h2></div><div class="card"><p>In most jurisdictions, scanning a system without the owner's permission can be a civil or criminal matter, regardless of intent. Before running Nmap against anything other than your own equipment or a dedicated lab, make sure you have clear, written authorization that states which systems, time windows, and scan types are permitted.</p></div>
+<div class="note danger">If you are ever unsure whether you're authorized to scan something, the safe default is: don't. Ask first, or stay inside your own lab.</div></div></section><section id="roadmap"><div class="container"><div class="section-head"><div class="num">09 / learning_roadmap.txt</div><h2>Learning Roadmap</h2></div><div class="card"><p>Start with ports and protocols → learn TCP/UDP → understand DNS and HTTP → learn basic Nmap output → practice in a virtual lab → study service enumeration → learn how defenders reduce exposed attack surface.</p></div>
+<div class="roadmap" style="margin-top:18px">
+<div class="step"><div class="step-num">1</div><p>Ports &amp; protocols — what a port number represents and why there are 65,535 of them.</p></div>
+<div class="step"><div class="step-num">2</div><p>TCP vs UDP — connection-oriented vs connectionless communication, and why scans behave differently for each.</p></div>
+<div class="step"><div class="step-num">3</div><p>DNS &amp; HTTP basics — the application-layer protocols you'll see referenced constantly in scan and packet output.</p></div>
+<div class="step"><div class="step-num">4</div><p>Reading Nmap output — states, services, and version strings.</p></div>
+<div class="step"><div class="step-num">5</div><p>Hands-on practice in an isolated virtual lab you fully control.</p></div>
+<div class="step"><div class="step-num">6</div><p>Service enumeration — going from "a port is open" to "I understand what's actually running there."</p></div>
+<div class="step"><div class="step-num">7</div><p>Defensive attack-surface reduction — turning findings into fixes.</p></div>
+</div></div></section></main><footer class="footer"><div class="container"><p><span class="prompt">root@starling:~$</span> echo "Learn ethically. Test responsibly."</p><p style="margin-top:8px">© 2026 Starling Thapa · Security Tools Learning Series</p></div></footer></body></html>
